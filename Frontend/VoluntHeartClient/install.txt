@@ -1,0 +1,10 @@
+install
+
+ #frontend
+    node modules(npm install)
+    mui
+    mui icons
+    react router
+    tailwind(config css file)
+    boostrap
+    mui lab
