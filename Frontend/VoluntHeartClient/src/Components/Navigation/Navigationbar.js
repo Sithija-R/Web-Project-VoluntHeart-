@@ -14,11 +14,13 @@ export const navigation=[
         title:"Home",
         icon:<HomeIcon style={{color:'none'}}/>,
         path:"/home"
-    },{
-        title:"Explore",
-        icon:<TravelExploreIcon/>,
-        path:"/explore"
-    },{
+    },
+    // {
+    //     title:"Explore",
+    //     icon:<TravelExploreIcon/>,
+    //     path:"/explore"
+    // },
+    {
         title:"Notification",
         icon:<NotificationsActiveIcon/>,
         path:"/notification"
@@ -26,19 +28,23 @@ export const navigation=[
         title:"Messages",
         icon:<EmailIcon/>,
         path:"/messages"
-    },{
-        title:"List",
-        icon:<FormatListBulletedIcon/>,
-        path:"/list"
-    },{
-        title:"Groups",
-        icon:<GroupsIcon/>,
-        path:"/groups"
-    },{
-        title:"Verified",
-        icon:<VerifiedIcon/>,
-        path:"/verification"
-    },{
+    },
+    // {
+    //     title:"List",
+    //     icon:<FormatListBulletedIcon/>,
+    //     path:"/list"
+    // },
+    // {
+    //     title:"Groups",
+    //     icon:<GroupsIcon/>,
+    //     path:"/groups"
+    // },
+    // {
+    //     title:"Verified",
+    //     icon:<VerifiedIcon/>,
+    //     path:"/verification"
+    // },
+    {
         title:"Profile",
         icon:<AccountCircleIcon/>,
         path:"/profile"

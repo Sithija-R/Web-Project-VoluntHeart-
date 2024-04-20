@@ -14,7 +14,7 @@ const Rightsection = () => {
 
     <section className='mt-8'>
       <h2 className='px-2 text-gray-600 mb-3 font-bold'>Suggestions</h2>
-      <div className=" overflow-y-scroll px-3 space-y-2 " style={{height:'75vh'}}>
+      <div className="hideScrollBar overflow-y-scroll px-3 space-y-2 " style={{height:'75vh'}}>
         {[1,2,3,4,5,6,7].map((item)=> <SuggestionCard/>)}
       </div>
     </section>

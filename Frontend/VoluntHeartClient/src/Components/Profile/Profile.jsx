@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Avatar, Button } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -11,17 +11,20 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Postcontainer from "../Homesection/Postcontainer";
 import { useNavigate } from "react-router-dom";
-import { palette } from "@mui/system";
+
 import ProfileModal from "./ProfileModal";
 
 const Profile = () => {
+
+  const [openProfileModal,setOpenProfileModal] = useState(false);
+  const handleEditProfile = () => setOpenProfileModal(true);
+  const handleClose = () => setOpenProfileModal(false);
+
   const navigate = useNavigate();
   const [tabvalue, setTabValue] = React.useState("1");
 
   const handleBack = () => navigate(-1);
-  const handleEditProfile = () => {
-    console.log("open profile model");
-  };
+
   const handleProfileFollowing = () => {
     console.log("Profile Following");
   };
@@ -41,7 +44,7 @@ const Profile = () => {
           Back
         </h1>
       </div>
-      <div className="overflow-y-scroll px-2" style={{ height: "88vh" }}>
+      <div className="hideScrollBar overflow-y-scroll px-2" style={{ height: "88vh" }}>
         <section>
           <img
             className="w-[100%] h-[15rem] object-cover"
@@ -56,7 +59,7 @@ const Profile = () => {
             sx={{ width: "10rem", height: "10rem", border: "4px solid white" }}
           />
 
-          {false ? (
+          {true ? (
             <Button
               sx={{
                 borderRadius: "20px",
@@ -137,7 +140,7 @@ const Profile = () => {
               </Box>
               <TabPanel
                 value="1"
-                className="overflow-y-scroll space-y-2"
+                className="hideScrollBar overflow-y-scroll space-y-2"
                 sx={{ height: "75vh" }}
               >
                 {[1, 2, 3, 4].map((item) => (
@@ -154,7 +157,7 @@ const Profile = () => {
        
 
       </div>
-      <ProfileModal/>
+      <ProfileModal handleClose={handleClose} open={openProfileModal}/>
     </>
   );
 };

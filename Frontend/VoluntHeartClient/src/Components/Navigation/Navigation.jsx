@@ -2,11 +2,39 @@ import React from "react";
 import { navigation } from "./Navigationbar";
 import { useNavigate } from "react-router-dom";
 import { Avatar, Button } from "@mui/material";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Postform from "../Homesection/Postform";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Navigation = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
     console.log("logout");
+  };
+
+
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    
+  };
+  
+
+  const modelstyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 900,
+    bgcolor: "background.paper",
+   outline:'none',
+    boxShadow: 24,
+    p: 4,
+    borderRadius:'12px',
+   
   };
   return (
     <div className="">
@@ -57,6 +85,7 @@ const Navigation = () => {
         </div>
         <div className="py-6">
           <Button
+          onClick={handleOpen}
             sx={{
               width: "75%",
               borderRadius: "20px",
@@ -70,6 +99,21 @@ const Navigation = () => {
           >
             Post
           </Button>
+
+          <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={modelstyle}>
+              <div className="flex justify-between text-slate-600 mb-4">
+                <h4 className="font-semibold">Create Post</h4>
+                <CloseIcon onClick={handleClose} className="cursor-pointer"/>
+              </div>
+              <Postform/>
+            </Box>
+          </Modal>
         </div>
       </div>
     </div>
