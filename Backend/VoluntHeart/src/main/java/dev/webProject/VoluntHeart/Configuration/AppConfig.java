@@ -1,4 +1,4 @@
-package dev.Configuration;
+package dev.webProject.VoluntHeart.Configuration;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,24 +22,24 @@ import jakarta.servlet.http.HttpServletRequest;
 public class AppConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeHttpRequests(Authorize->Authorize.requestMatchers("/api/**").authenticated()
-            .anyRequest().permitAll()      
-        ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-        .csrf().disable()
-        .cors().configurationSource(corsConfigurationSource()).and()
-        .httpBasic().and().formLogin();
+                .and()
+                .authorizeHttpRequests(Authorize -> Authorize.requestMatchers("/api/**").authenticated()
+                        .anyRequest().permitAll())
+                .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+                .csrf().disable()
+                .cors().configurationSource(corsConfigurationSource()).and()
+                .httpBasic().and().formLogin();
 
         return http.build();
     }
 
-    private CorsConfigurationSource corsConfigurationSource(){
+    private CorsConfigurationSource corsConfigurationSource() {
         return new CorsConfigurationSource() {
-            
+
             @Override
-            public CorsConfiguration getCorsConfiguration(HttpServletRequest request){
+            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg = new CorsConfiguration();
                 cfg.setAllowedOrigins(Arrays.asList("http://localhost:3000/"));
                 cfg.setAllowedMethods(Collections.singletonList("*"));
@@ -53,8 +53,8 @@ public class AppConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
+
 }

@@ -21,7 +21,7 @@ const MapComponent = ({ onMapClick, selectedLocation }) => {
   };
 
   return (
-    <LoadScript >
+    <LoadScript googleMapsApiKey="AIzaSyA5pjE7sMhKpoCvlu0hxPTdu4-WWrorX-8">
       <GoogleMap
         mapContainerStyle={mapStyles}
         zoom={selectedLocation ? 15 : 2}

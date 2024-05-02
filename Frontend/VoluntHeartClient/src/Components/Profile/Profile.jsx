@@ -95,7 +95,7 @@ const Profile = () => {
             </div>
 
             <p className="text-sm  font-semibold  pt-1 opacity-80 text-green-500">
-              {false ? " Fundraiser" : "Volunteer"}
+              {false ? " Fundraiser" : "Donor"}
             </p>
           </div>
         </section>

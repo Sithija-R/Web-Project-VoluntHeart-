@@ -95,7 +95,7 @@ const Postcontainer = () => {
         className="w-10/12 border border-gray-600 p-1 rounded-md m-auto"
         controls
         onError={(e) => { e.target.style.display = 'none'; }}
-        src=""
+        src="https://cdn.pixabay.com/video/2021/01/11/61695-499594106_tiny.mp4"
       />
     
       </div>
