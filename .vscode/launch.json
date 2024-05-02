@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-VoluntHeartApplication<VoluntHeart>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "dev.webProject.VoluntHeart.VoluntHeartApplication",
+            "projectName": "VoluntHeart",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

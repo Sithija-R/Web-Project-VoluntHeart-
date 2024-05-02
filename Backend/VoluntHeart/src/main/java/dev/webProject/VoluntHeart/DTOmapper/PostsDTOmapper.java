@@ -27,7 +27,7 @@ public class PostsDTOmapper {
         postsDTO.setLiked(isLikedByReqUser(posts, reqUser));
         postsDTO.setCreator(isCreatedByReqUser(creator, reqUser));
         postsDTO.setTotalLikes(posts.getPostLikes().size());
-
+        
         return postsDTO;
     }
 
