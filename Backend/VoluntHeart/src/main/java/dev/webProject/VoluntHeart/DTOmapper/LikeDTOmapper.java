@@ -8,17 +8,13 @@ import dev.webProject.VoluntHeart.Models.Users.UserModel;
 
 public class LikeDTOmapper {
     
-    public static LikeDTO mapToLikeDTO(LikeModel like,UserModel reqUser){
-
-        UserDTO userDto = UserDTOmapper.mapToUserDTO(like.getUser());
-        // UserDTO reqUserDTO = UserDTOmapper.mapToUserDTO(reqUser);
-        PostsDTO postsDTO = PostsDTOmapper.mapToPostsDTO(like.getLikedPost(),reqUser);
+    public static LikeDTO mapToLikeDTO(LikeModel like){
 
         LikeDTO likeDTO = new LikeDTO();
         
         likeDTO.setLikeId(like.getLikeId());
-        likeDTO.setLikedPost(postsDTO);
-        likeDTO.setUser(userDto);
+        likeDTO.setUserId(like.getUserId());;
+        likeDTO.setLikedPostId(like.getLikedPostId());;
 
 
         return likeDTO;

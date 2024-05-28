@@ -11,13 +11,10 @@ import dev.webProject.VoluntHeart.Models.Posts;
 import dev.webProject.VoluntHeart.Models.Users.UserModel;
 
 @Repository
-public interface LikeRepo extends MongoRepository<LikeModel,ObjectId>{
-
-    public List<LikeModel> findLikeByPostId(ObjectId postIdentifier);
-
-    public LikeModel findLikeByUserAndPost(UserModel user,Posts post);
+public interface LikeRepo extends MongoRepository<LikeModel, String> {
 
    
 
-    
+    public LikeModel findByUserIdAndLikedPostId(String userId, String likedPostId);
+
 }

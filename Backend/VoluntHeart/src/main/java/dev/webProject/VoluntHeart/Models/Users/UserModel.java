@@ -3,6 +3,7 @@ package dev.webProject.VoluntHeart.Models.Users;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -16,10 +17,11 @@ import dev.webProject.VoluntHeart.Models.Posts;
 import lombok.Data;
 
 @Data
+@Document(collection = "users")
 public class UserModel {
 
-    @MongoId
-    ObjectId userId;
+    @Id
+    String userId;
 
     String email;
     String password;
@@ -32,6 +34,7 @@ public class UserModel {
     boolean donor;
     Location userLocation;
     private boolean googleLogin;
+    String googleId;
 
     @DocumentReference
     @JsonIgnore

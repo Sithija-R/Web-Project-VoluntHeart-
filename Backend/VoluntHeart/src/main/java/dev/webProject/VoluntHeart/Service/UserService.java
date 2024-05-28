@@ -2,8 +2,8 @@ package dev.webProject.VoluntHeart.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -29,44 +29,46 @@ public class UserService {
     }
 
     //find by Id
-    public UserModel findByID(ObjectId userId){
-        return findByID(userId);
+    public Optional<UserModel> findByID(String userId){
+        return userRepo.findById(userId);
     }
 
     // find by email
     public UserModel findUserModelByEmail(String email) {
-        return userRepo.findUserbyEmail(email);
+        return userRepo.findByEmail(email);
     }
 
     // find by full name
     public List<UserModel> findbyFullname(String fullName) {
-        return userRepo.findUserByFullname(fullName);
+        return userRepo.findByFullName(fullName);
 
     }
 
     //find by jwt token
     public UserModel findByJwtToken(String jwt){
         String email = jwtProvider.getEmailFromToken(jwt);
+       
         return findUserModelByEmail(email);
     }
 
     // login purpose
     public User findbyemail(String email) {
 
-        UserModel user = userRepo.findUserbyEmail(email);
-        if (user == null || user.isGoogleLogin()) {
+        UserModel user = userRepo.findByEmail(email);
+        if (user == null) {
             throw new UsernameNotFoundException("User Not found");
 
         }
         List<GrantedAuthority> authorities = new ArrayList<>();
         return new User(user.getEmail(), user.getPassword(), authorities);
+     
 
     }
 
   //follow
-  public UserModel userFollow(ObjectId toFollowId,UserModel reqUser){
+  public UserModel userFollow(String email,UserModel reqUser){
     
-    UserModel userToFollow = findByID(toFollowId);
+    UserModel userToFollow = findUserModelByEmail(email);
     if (reqUser.getFollowings().contains(userToFollow) && userToFollow.getFollowers().contains(reqUser)) {
         reqUser.getFollowings().remove(userToFollow);
         userToFollow.getFollowers().remove(reqUser);

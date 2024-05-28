@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
 import Modal from "@mui/material/Modal";
 import MapComponent from "../MapComponents/MapComponent";
+import { v4 as uuidv4 } from 'uuid';
 
 const Postform = () => {
   const [uploadImage, setUploadImage] = useState(false);
@@ -18,16 +19,15 @@ const Postform = () => {
   const [uploadVideo, setUploadVideo] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState("");
 
-  const [imgPreview, setImgPreview]= useState(null);
-  const [videoPreview, setVideoPreview]= useState(null);
+  const [imgPreview, setImgPreview] = useState(null);
+  const [videoPreview, setVideoPreview] = useState(null);
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setLocation(null); 
+    setLocation(null);
   };
-  
 
   const modelstyle = {
     position: "absolute",
@@ -36,11 +36,10 @@ const Postform = () => {
     transform: "translate(-50%, -50%)",
     width: 900,
     bgcolor: "background.paper",
-   outline:'none',
+    outline: "none",
     boxShadow: 24,
     p: 4,
-    borderRadius:'12px',
-   
+    borderRadius: "12px",
   };
 
   const validationSchema = Yup.object().shape({
@@ -50,6 +49,8 @@ const Postform = () => {
   const handleSubmit = (values, { resetForm }) => {
     console.log(values);
     resetForm();
+    setImgPreview("");
+   
   };
 
   const formik = useFormik({
@@ -57,30 +58,34 @@ const Postform = () => {
       content: "",
       image: "",
       video: "",
-      location:""
+      locationLat: "",
+      locationLng: "",
     },
     onSubmit: handleSubmit,
     validationSchema,
   });
 
   const handleSelectImage = (e) => {
-    const imgUrl = e.target.files[0];
-    formik.setFieldValue("image", imgUrl);
-    setselectedImage(imgUrl);
+    const img = e.target.files[0];
+
+    const uniqueName = `${uuidv4()}_${img.name}`;
+    const renamedFile = new File([img], uniqueName, { type: img.type });
+    formik.setFieldValue("image", renamedFile);
+    setselectedImage(URL.createObjectURL(renamedFile));
     setUploadImage(false);
-    previewImg(imgUrl);
+    setImgPreview(URL.createObjectURL(renamedFile))
+    // previewImg(renamedFile);
   };
 
-  const previewImg=(imgUrl)=>{
-    if (imgUrl) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImgPreview(reader.result);
-      };
-      reader.readAsDataURL(imgUrl);
-    }
-  }
-  
+  // const previewImg = (imgUrl) => {
+  //   if (imgUrl) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       setImgPreview(reader.result);
+  //     };
+  //     reader.readAsDataURL(imgUrl);
+  //   }
+  // };
 
   const handleSelectVideo = (e) => {
     const videoUrl = e.target.files[0];
@@ -89,7 +94,7 @@ const Postform = () => {
     setUploadVideo(false);
     previewVideo(videoUrl);
   };
-  const previewVideo=(videoUrl)=>{
+  const previewVideo = (videoUrl) => {
     if (videoUrl) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -97,70 +102,61 @@ const Postform = () => {
       };
       reader.readAsDataURL(videoUrl);
     }
-  }
+  };
   //Location handling
   const [location, setLocation] = React.useState(null);
-  const [address,setAddress]=useState('');
+  const [address, setAddress] = useState("");
 
   const handleMapClick = (clickedLocation) => {
     setLocation(clickedLocation);
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${clickedLocation.lat}&lon=${clickedLocation.lng}`;
-    const dt=fetch(url).then(res=>res.json()).then(data=>setAddress(data.address) )
-   
+    const dt = fetch(url)
+      .then((res) => res.json())
+      .then((data) => setAddress(data.address));
   };
 
-const handleSelectLocation = () => { formik.setFieldValue("location",location);};
-
-
+  const handleSelectLocation = () => {
+    formik.setFieldValue("locationLat", location.lat);
+    formik.setFieldValue("locationLng", location.lng);
+  };
 
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="py-3 mb-5">
-      <TextField
-                    fullWidth
-                    multiline
-                    rows={3}
-                    id="content"
-                    name="content"
-                    label="Content"
-                    value={formik.values.content}
-                    onChange={formik.handleChange}
-                    error={formik.touched.content && Boolean(formik.errors.content)}
-                    helperText={formik.touched.content && formik.errors.content}
-                  />
-        {/* <input
-          type="text"
+        <TextField
+          fullWidth
+          multiline
+          rows={3}
+          id="content"
           name="content"
-          
-          placeholder="content"
-          className=" w-full border text-lg bg-transparent"
-          {...formik.getFieldProps("content")}
-        /> */}
-        {/* {formik.errors.content && formik.touched.content && (
-          <span className="text-red-500">{formik.errors.content}</span>
-        )} */}
+          label="Content"
+          value={formik.values.content}
+          onChange={formik.handleChange}
+          error={formik.touched.content && Boolean(formik.errors.content)}
+          helperText={formik.touched.content && formik.errors.content}
+        />
       </div>
       <div className="flex justify-between my-4">
-      {imgPreview ? (
-                        <img
-                          src={imgPreview}
-                          alt="Preview"
-                          className="flex w-[400px] h-[185px] overflow-hidden rounded-lg object-cover"
-                        />
-                      ) : (
-                        <>
-                        </>)}
-      { videoPreview?(
-        <video
-        className="w-[400px] h-[185px] overflow-hidden rounded-lg object-cover"
-        controls
-        onError={(e) => { e.target.style.display = 'none'; }}
-        src={videoPreview}
-      />
-      ):("")
-        }
+        {imgPreview ? (
+          <img
+            src={imgPreview}
+            alt="Preview"
+            className="flex w-[400px] h-[185px] overflow-hidden rounded-lg object-cover"
+          />
+        ) : (<></>)}
+
+        {videoPreview ? (
+          <video
+            className="w-[400px] h-[185px] overflow-hidden rounded-lg object-cover"
+            controls
+            onError={(e) => {
+              e.target.style.display = "none";
+            }}
+            src={videoPreview}
+          />
+        ) : ("")}
+        
       </div>
-      
 
       <div className="flex justify-between items-center  pt-1">
         <div className="flex space-x-5 items-center">
@@ -186,7 +182,11 @@ const handleSelectLocation = () => { formik.setFieldValue("location",location);}
             />
           </label>
 
-          <LocationOnIcon sx={{ color: "#1d9bf0" }} onClick={handleOpen} className="cursor-pointer"/>
+          <LocationOnIcon
+            sx={{ color: "#1d9bf0" }}
+            onClick={handleOpen}
+            className="cursor-pointer"
+          />
           <Modal
             open={open}
             onClose={handleClose}
@@ -195,26 +195,32 @@ const handleSelectLocation = () => { formik.setFieldValue("location",location);}
           >
             <Box sx={modelstyle}>
               <div className="flex justify-end text-slate-700 mb-5">
-                <CloseIcon onClick={handleClose} className="cursor-pointer"/>
+                <CloseIcon onClick={handleClose} className="cursor-pointer" />
               </div>
               <div>
-                <MapComponent selectedLocation={location}
-                  
-                  onMapClick={handleMapClick}/>
+                <MapComponent
+                  selectedLocation={location}
+                  onMapClick={handleMapClick}
+                />
               </div>
               <div className="flex justify-between">
-              {location && (
-                <div className="">
-                  <p>Selected Location:</p>
-                  <p>{address.village}</p>
-                  <p>{address.town}</p>
-                  <p>{address.city}</p>
-                  <p>{address.country}</p>
-                  
-
-                </div>
+                {location && (
+                  <div className="">
+                    <p>Selected Location:</p>
+                    <p>{address.village}</p>
+                    <p>{address.town}</p>
+                    <p>{address.city}</p>
+                    <p>{address.country}</p>
+                  </div>
                 )}
-                <Button onClick={(e)=>{handleSelectLocation(e); handleClose(e);}}>Set Location</Button>
+                <Button
+                  onClick={(e) => {
+                    handleSelectLocation(e);
+                    handleClose(e);
+                  }}
+                >
+                  Set Location
+                </Button>
               </div>
             </Box>
           </Modal>

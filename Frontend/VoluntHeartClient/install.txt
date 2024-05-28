@@ -8,3 +8,7 @@ install
     tailwind(config css file)
     boostrap
     mui lab
+    redux
+    axios
+    npm i @react-oauth/google
+    npm install sweetalert2

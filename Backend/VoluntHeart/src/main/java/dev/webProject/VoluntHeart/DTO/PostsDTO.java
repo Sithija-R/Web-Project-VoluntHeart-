@@ -10,9 +10,9 @@ import lombok.Data;
 @Data
 public class PostsDTO {
 
-    private ObjectId postId;
+    private String postId;
 
-
+    private String uniqueKey;
     private String content;
     private String image;
     private String video;

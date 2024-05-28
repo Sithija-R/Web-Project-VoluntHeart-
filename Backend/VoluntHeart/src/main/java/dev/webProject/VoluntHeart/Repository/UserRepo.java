@@ -2,31 +2,21 @@ package dev.webProject.VoluntHeart.Repository;
 
 import java.util.List;
 
-
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import org.springframework.stereotype.Repository;
 
-
 import dev.webProject.VoluntHeart.Models.Users.UserModel;
 
-
 @Repository
-public interface UserRepo extends MongoRepository<UserModel,ObjectId>{
+public interface UserRepo extends MongoRepository<UserModel, String> {
 
+    public List<UserModel> findByFullName(String fullName);
 
-    //set as comments until database connect
-    
+    public UserModel findByEmail(String email);
+   
 
-
-public List<UserModel> findUserByFullname(String fullName);
-
-
-public UserModel findUserbyEmail(String email);
-
-
-public List<UserModel> findByFullNameContainingIgnoreCase(String fullName);
-
+    public List<UserModel> findByFullNameContainingIgnoreCase(String fullName);
 
 }

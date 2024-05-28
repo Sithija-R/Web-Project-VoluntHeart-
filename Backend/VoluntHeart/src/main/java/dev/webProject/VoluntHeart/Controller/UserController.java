@@ -8,9 +8,8 @@ import dev.webProject.VoluntHeart.Models.Users.UserModel;
 import dev.webProject.VoluntHeart.Service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
-
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,10 +51,10 @@ public class UserController {
  
 
   //get user profile
-  @GetMapping("/{userId}")
-  public ResponseEntity<UserDTO> getUser(@PathVariable ObjectId userId,@RequestHeader("Authorization") String jwt){
+  @GetMapping()
+  public ResponseEntity<UserDTO> getUser(@PathVariable String email,@RequestHeader("Authorization") String jwt){
     UserModel reqUser = userService.findByJwtToken(jwt);
-    UserModel user2 = userService.findByID(userId);
+    UserModel user2 = userService.findUserModelByEmail(email);
 
     UserDTO userDTO_2 = UserDTOmapper.mapToUserDTO(user2);
 
@@ -63,9 +62,20 @@ public class UserController {
     return new ResponseEntity<UserDTO>(userDTO_2,HttpStatus.ACCEPTED);
   }
 
+
+  @GetMapping("/user/profile")
+  public ResponseEntity<UserDTO> getUserProfile(@RequestHeader("Authorization") String jwt){
+   UserModel reqUser = userService.findByJwtToken(jwt);
+
+    UserDTO userDTO = UserDTOmapper.mapToUserDTO(reqUser);
+
+   
+    return new ResponseEntity<UserDTO>(userDTO,HttpStatus.ACCEPTED);
+  }
+
   //follow user
   @PutMapping("follow/{userId}")
-  public ResponseEntity<UserDTO> followUserHandling(@PathVariable ObjectId userId,@RequestHeader("Authorization") String jwt){
+  public ResponseEntity<UserDTO> followUserHandling(@PathVariable String userId,@RequestHeader("Authorization") String jwt){
     UserModel followRequestor = userService.findByJwtToken(jwt);
 
     UserModel userTofollow = userService.userFollow(userId, followRequestor);
@@ -80,8 +90,12 @@ public class UserController {
 
 
 
+@GetMapping("user/get/{userId}")
+public ResponseEntity<Optional<UserModel>> getuserId(@PathVariable String userId){
+Optional<UserModel> uname = userService.findByID(userId);
 
-
+  return new ResponseEntity<Optional<UserModel>>(uname,HttpStatus.OK);
+}
 
 
 

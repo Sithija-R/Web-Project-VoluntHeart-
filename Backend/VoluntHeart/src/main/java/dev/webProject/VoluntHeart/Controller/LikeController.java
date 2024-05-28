@@ -1,5 +1,6 @@
 package dev.webProject.VoluntHeart.Controller;
 
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,13 +30,15 @@ public class LikeController {
     
 
 //like handling
-@PostMapping("/posts/{postId}")
-    public ResponseEntity<LikeDTO> likePost(@PathVariable ObjectId postId,@RequestHeader("Authorization") String jwt){
+@PostMapping("/like/{uniqueKey}")
+    public ResponseEntity<LikeDTO> likePost(@PathVariable String uniqueKey, @RequestHeader("Authorization") String jwt){
+         
+        String email = jwt;
+        
+        
+        LikeModel like = likeService.likeHandler(email,uniqueKey);
 
-        UserModel user = userService.findByJwtToken(jwt);
-        LikeModel like = likeService.likeHandler(user,postId);
-
-        LikeDTO likeDTO = LikeDTOmapper.mapToLikeDTO(like, user);
+        LikeDTO likeDTO = LikeDTOmapper.mapToLikeDTO(like);
         
         return new ResponseEntity<LikeDTO>(likeDTO,HttpStatus.CREATED);
 

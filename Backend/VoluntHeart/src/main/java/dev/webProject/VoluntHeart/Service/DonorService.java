@@ -17,7 +17,7 @@ public class DonorService {
     }
 
     public DonorModel findByEmail(String email){
-        return donorRepo.findDonorByEmail(email);
+        return donorRepo.findByEmail(email);
     }
 
     //   public User findbyemail(String email){

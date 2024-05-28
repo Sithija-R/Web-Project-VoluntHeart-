@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Avatar, Button } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -11,19 +11,34 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import Postcontainer from "../Homesection/Postcontainer";
 import { useNavigate } from "react-router-dom";
+import {useDispatch, useSelector} from 'react-redux'
 
 import ProfileModal from "./ProfileModal";
+import { getUsersLikedPosts, getUsersPosts } from "../../Storage/Posts/Action";
 
 const Profile = () => {
 
+  const {auth}=useSelector(store=>store)
+  const {post} = useSelector(store=>store)
+  const navigate = useNavigate();
+  const handleBack = () => navigate(-1);
+
+  const dispatch = useDispatch();
+   
+  useEffect(() => {
+    dispatch(getUsersPosts());
+    dispatch(getUsersLikedPosts());
+  }, [post.like]);
+
+ 
   const [openProfileModal,setOpenProfileModal] = useState(false);
   const handleEditProfile = () => setOpenProfileModal(true);
   const handleClose = () => setOpenProfileModal(false);
-
-  const navigate = useNavigate();
   const [tabvalue, setTabValue] = React.useState("1");
 
-  const handleBack = () => navigate(-1);
+  
+
+
 
   const handleProfileFollowing = () => {
     console.log("Profile Following");
@@ -55,9 +70,12 @@ const Profile = () => {
         <section className="pl-6 flex justify-between items-start mt-5 h-[5rem]">
           <Avatar
             className="bg-red-100 transform -translate-y-24"
-            src="https://selfmadewebdesigner.com/wp-content/uploads/2019/09/self-made-web-designer-upwork-profile.jpg"
+            src={auth.user?.profilePic}
             sx={{ width: "10rem", height: "10rem", border: "4px solid white" }}
           />
+           
+        
+           
 
           {true ? (
             <Button
@@ -90,12 +108,12 @@ const Profile = () => {
         <section>
           <div className="flex items-center justify-between px-12">
             <div>
-              <h3 className="font-bold text-lg opacity-80">Full Name</h3>
-              <p className="text-sm text-gray-500">@Username</p>
+              <h3 className="font-bold text-lg opacity-80">{auth.user?.fullName}</h3>
+              <p className="text-sm text-gray-500">{auth.user?.email}</p>
             </div>
 
             <p className="text-sm  font-semibold  pt-1 opacity-80 text-green-500">
-              {false ? " Fundraiser" : "Donor"}
+              {auth.user?.donor?"Donor": "Fundraiser"}
             </p>
           </div>
         </section>
@@ -113,7 +131,7 @@ const Profile = () => {
           </div>
           <div
             className="cursor-pointer flex space-x-1"
-            onClick={() => window.open("https://example.com", "_blank")}
+            onClick={() => window.open(auth.user?.website, "_blank")}
           >
             <LinkIcon />
             <p>Website</p>
@@ -143,12 +161,21 @@ const Profile = () => {
                 className="hideScrollBar overflow-y-scroll space-y-2"
                 sx={{ height: "75vh" }}
               >
-                {[1, 2, 3, 4].map((item) => (
-                  <Postcontainer />
-                ))}
+               {post.usersPosts?.map((item) => (<Postcontainer item={item} />))}
+
               </TabPanel>
-              <TabPanel value="2">Item Two</TabPanel>
-              <TabPanel value="3">Item Three</TabPanel>
+
+              <TabPanel value="2" 
+              className="hideScrollBar overflow-y-scroll space-y-2"
+              sx={{ height: "75vh" }}>Item Two</TabPanel>
+
+              <TabPanel value="3" 
+              className="hideScrollBar overflow-y-scroll space-y-2"
+              sx={{ height: "75vh" }}>
+              
+              {post.likedPosts?.map((item) => (<Postcontainer item={item} />))}
+                
+                </TabPanel>
             </TabContext>
           </Box>
         </section>

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-
 import dev.webProject.VoluntHeart.Models.Location;
 import lombok.Data;
 
@@ -13,7 +12,7 @@ import lombok.Data;
 public class UserDTO {
 
    
-    ObjectId userId;
+    String userId;
 
     String email;
     String fullName;

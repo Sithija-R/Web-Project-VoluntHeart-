@@ -3,8 +3,8 @@ package dev.webProject.VoluntHeart.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -37,17 +37,21 @@ public class PostService {
 
     // create post
     public Posts createPosts(Map<String,String> data,UserModel creator) {
-
+        
         Posts post = new Posts();
-        Location location = new Location(Double.parseDouble(data.get("location_lat")), Double.parseDouble(data.get("location_lng")));
+        // Location location = new Location(Double.parseDouble(data.get("location_lat")), Double.parseDouble(data.get("location_lng")));
+        
+        String uniqueString = UUID.randomUUID().toString();
 
+        post.setUniqueKey(uniqueString);
         post.setContent(data.get("content"));
         post.setImage(data.get("image"));
         post.setVideo(data.get("video"));
-        post.setLocation(location);
+        // post.setLocation(location);
         post.setCreatedAt(LocalDateTime.now());
         post.setCreatedBy(creator);
 
+    
 
         creator.getPostsIds().add(post);
 
@@ -70,7 +74,7 @@ public class PostService {
 
   
     // delete posts (only for creator)
-    public void deletePost(ObjectId postId, String email) throws UserException {
+    public void deletePost(String postId, String email) throws UserException {
         Posts post = findByID(postId);
         UserModel creator = post.getCreatedBy();
 
@@ -88,8 +92,12 @@ public class PostService {
         return postRepo.findAll(sort);
     }
 
-    public Posts findByID(ObjectId id) {
-        return postRepo.findPostByPostId(id);
+    public Posts findByID(String id) {
+        return postRepo.findByPostId(id);
+    }
+
+    public Posts findPostByUniqueKey(String uniqueKey){
+        return postRepo.findByUniqueKey(uniqueKey);
     }
 
     public List<Posts> findByUser(UserModel user){

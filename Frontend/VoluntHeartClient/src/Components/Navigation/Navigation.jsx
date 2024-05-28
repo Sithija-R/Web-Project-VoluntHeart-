@@ -6,11 +6,20 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Postform from "../Homesection/Postform";
 import CloseIcon from "@mui/icons-material/Close";
+import {useDispatch, useSelector} from 'react-redux'
+import { logOut } from "../../Storage/Auth/Action";
+import { UserLogOut } from "../../Storage/Posts/Action";
 
 const Navigation = () => {
+
+
+  const {auth}=useSelector(Storage=>Storage)
   const navigate = useNavigate();
+  const dispatch=useDispatch();
+
   const handleLogout = () => {
-    console.log("logout");
+    dispatch(logOut());
+    navigate(`/`)
   };
 
 
@@ -48,8 +57,8 @@ const Navigation = () => {
               />
             </Avatar>
             <div>
-              <p>Full Name</p>
-              <p className="opacity-70">@username</p>
+              <p>{auth.user?.fullName}</p>
+              <p className="opacity-60 text-green-500">{auth.user?.donor?"donor":"fundraiser"}</p>
             </div>
           </div>
           <div>
@@ -75,7 +84,7 @@ const Navigation = () => {
           {navigation.map((item) => (
             <div
               className="cursor-pointer flex  space-x-3  max-w-10  "
-              onClick={() => item.title === "Profile"? navigate("/profile/${}"): navigate(item.path) }>
+              onClick={() =>  navigate(item.title) }>
               {item.icon}
               <p className="text-xl " style={{ color: "black" }}>
                 {item.title}

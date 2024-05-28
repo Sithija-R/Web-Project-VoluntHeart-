@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 @Controller
-@RequestMapping
+@RequestMapping("/api/posts")
 public class Postcontroller {
 
     @Autowired
@@ -38,7 +38,7 @@ public class Postcontroller {
 
 
     //get all posts
-    @GetMapping("/posts")
+    @GetMapping("/all")
     public ResponseEntity<List<PostsDTO>> getAllPosts( @RequestHeader("Authorization") String jwt) {
         
         UserModel user = userService.findByJwtToken(jwt);
@@ -51,12 +51,13 @@ public class Postcontroller {
     }
 
     //get users all posts
-    @GetMapping("posts/user/{userId}")
-    public ResponseEntity<List<PostsDTO>> getUserAllPosts(@PathVariable ObjectId userId, @RequestHeader("Authorization") String jwt) {
+    @GetMapping("/users")
+    public ResponseEntity<List<PostsDTO>> getUserAllPosts(@RequestHeader("Authorization") String jwt) {
         
-        UserModel user = userService.findByID(userId);
+        UserModel user = userService.findByJwtToken(jwt);
 
         List<Posts> allPosts = user.getPostsIds();
+
         List<PostsDTO> allPostsDTO = PostsDTOmapper.toListOfPostDTOs(allPosts, user);
 
         return new ResponseEntity<>(allPostsDTO,HttpStatus.OK);
@@ -64,10 +65,10 @@ public class Postcontroller {
     }
 
     //get user liked posts
-    @GetMapping("posts/user/{userId}/likes")
-    public ResponseEntity<List<PostsDTO>> getUserLikedPosts(@PathVariable ObjectId userId, @RequestHeader("Authorization") String jwt) {
+    @GetMapping("/user/likes")
+    public ResponseEntity<List<PostsDTO>> getUserLikedPosts( @RequestHeader("Authorization") String jwt) {
         
-        UserModel user = userService.findByID(userId);
+        UserModel user = userService.findByJwtToken(jwt);
 
         List<Posts> allPosts = user.getLikedPosts();
         List<PostsDTO> allPostsDTO = PostsDTOmapper.toListOfPostDTOs(allPosts, user);
@@ -78,10 +79,11 @@ public class Postcontroller {
 
 
     //create post
-    @PostMapping("path")
-    public ResponseEntity<PostsDTO> createPost(@RequestBody Map<String, String> req, @RequestHeader("Authorization") String jwt) {
+    @PostMapping("/create")
+    public ResponseEntity<PostsDTO> createPost(@RequestBody Map<String, String> req) {
+// dont use double for location. use String
 
-        UserModel creator = userService.findByJwtToken(jwt);
+        UserModel creator = userService.findUserModelByEmail("sithijaruwan@gmail.com");
         Posts newPost = postService.createPosts(req, creator);
 
         PostsDTO postsDTO = PostsDTOmapper.mapToPostsDTO(newPost, creator);
@@ -106,8 +108,8 @@ public class Postcontroller {
 
 
     //delete post
-    @DeleteMapping("/{postId}")
-    public ResponseEntity<ApiResponse> deletePosts(@PathVariable ObjectId postId, @RequestHeader("Authorization") String jwt) throws UserException {
+    @DeleteMapping("delete/{postId}")
+    public ResponseEntity<ApiResponse> deletePosts(@PathVariable String postId, @RequestHeader("Authorization") String jwt) throws UserException {
         UserModel deleteRequestor = userService.findByJwtToken(jwt);
         postService.deletePost(postId, deleteRequestor.getEmail());
 
@@ -116,5 +118,14 @@ public class Postcontroller {
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
+
+
+    @GetMapping("find/{postId}")
+    public ResponseEntity<Posts> getbyId(@PathVariable String postId){
+      
+        Posts p = postService.findByID(postId);
+        return new ResponseEntity<>(p,HttpStatus.OK);
+    }
+    
 
 }

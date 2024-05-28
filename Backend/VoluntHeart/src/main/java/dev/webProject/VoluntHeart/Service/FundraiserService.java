@@ -22,7 +22,7 @@ public class FundraiserService {
     }
 
     public FundraiserModel findByEmail(String email){
-        return fundraiserRepo.findFundraiserByEmail(email);
+        return fundraiserRepo.findByEmail(email);
     }
 
     //   public User findbyemail(String email){

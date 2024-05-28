@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid } from "@mui/material";
 import Navigation from "../Navigation/Navigation";
 import Homesection from "../Homesection/Homesection";
@@ -13,6 +13,9 @@ const HomePage = () => {
 const handleTheme=()=>{
   console.log('handle theme');
 }
+useEffect(() => {
+ 
+}, []);
 
 
   return (
@@ -54,7 +57,7 @@ const handleTheme=()=>{
           <Routes>
             <Route path="/" element={ <Homesection />}></Route>
             <Route path="/home/" element={ <Homesection />}></Route>
-            <Route path="/profile/:id" element={ <Profile/>}></Route>
+            <Route path="/profile/" element={ <Profile/>}></Route>
           </Routes>
          
         </Grid>

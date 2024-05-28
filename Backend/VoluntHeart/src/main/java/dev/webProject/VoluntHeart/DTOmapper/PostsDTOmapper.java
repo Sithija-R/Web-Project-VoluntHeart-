@@ -18,6 +18,7 @@ public class PostsDTOmapper {
         UserDTO creator = UserDTOmapper.mapToUserDTO(posts.getCreatedBy());
 
         postsDTO.setPostId(posts.getPostId());
+        postsDTO.setUniqueKey(posts.getUniqueKey());
         postsDTO.setContent(posts.getContent());
         postsDTO.setImage(posts.getImage());
         postsDTO.setVideo(posts.getVideo());
@@ -34,7 +35,7 @@ public class PostsDTOmapper {
     private static boolean isLikedByReqUser(Posts posts, UserModel reqUser) {
 
         for (LikeModel like : posts.getPostLikes()) {
-            if (like.getUser().getUserId().equals(reqUser.getUserId())) {
+            if (like.getUserId().equals(reqUser.getUserId())) {
                 return true;
             }
         }
