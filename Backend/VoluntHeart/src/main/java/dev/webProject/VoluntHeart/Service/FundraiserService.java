@@ -25,18 +25,7 @@ public class FundraiserService {
         return fundraiserRepo.findByEmail(email);
     }
 
-    //   public User findbyemail(String email){
 
-    //     FundraiserModel fundraiser = null;
-    //     fundraiserRepo.findFundraiserByEmail(email);
-    //     if (fundraiser==null||fundraiser.isGoogleLogin()) {
-    //         throw new UsernameNotFoundException("User Not found");
-            
-    //     }
-    //     List<GrantedAuthority> authorities = new ArrayList<>();
-    //     return new User(fundraiser.getEmail(),fundraiser.getPassword(),authorities);
-
-    // }
 
 //update profile
     public FundraiserModel updateUser(String email, FundraiserModel requester){

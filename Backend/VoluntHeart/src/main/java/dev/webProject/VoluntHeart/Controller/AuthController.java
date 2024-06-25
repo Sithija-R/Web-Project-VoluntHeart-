@@ -11,6 +11,9 @@ import dev.webProject.VoluntHeart.Repository.DonorRepo;
 import dev.webProject.VoluntHeart.Repository.FundraiserRepo;
 import dev.webProject.VoluntHeart.Response.AuthResponse;
 import dev.webProject.VoluntHeart.Service.UserService;
+
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -21,7 +24,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,7 +49,6 @@ public class AuthController {
     private UserService userService;
 
 
-   
 
 
 //donor log with google
@@ -66,6 +67,9 @@ public class AuthController {
         if ((donor == null)) {
 
         DonorModel createDonor = new DonorModel();
+        String uniqueString = UUID.randomUUID().toString();
+
+        createDonor.setUserSecret(uniqueString);
         createDonor.setEmail(email);
         createDonor.setPassword(encodedPassword);
         createDonor.setFullName(userName);
@@ -106,8 +110,11 @@ public class AuthController {
             throw new UserException("Email is already exist");
 
         }
+        
         String encodedPassword = passwordEncoder.encode(password);
         FundraiserModel createFundraiser = new FundraiserModel();
+        String uniqueString = UUID.randomUUID().toString();
+        createFundraiser.setUserSecret(uniqueString);
         createFundraiser.setEmail(email);
         createFundraiser.setPassword(encodedPassword);
         createFundraiser.setFullName(fullName);
@@ -139,6 +146,8 @@ public class AuthController {
         String encodedPassword = passwordEncoder.encode(password);
 
         DonorModel createDonor = new DonorModel();
+        String uniqueString = UUID.randomUUID().toString();
+        createDonor.setUserSecret(uniqueString);
         createDonor.setEmail(email);
         createDonor.setPassword(encodedPassword);
         createDonor.setFullName(fullName);
@@ -173,7 +182,7 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             return new ResponseEntity<>(new UserException("Invalid Email or Password"), HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
-            return new ResponseEntity<>(new UserException("An error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new UserException("Invalid Email or Password"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }

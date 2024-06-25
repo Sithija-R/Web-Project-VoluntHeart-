@@ -40,7 +40,8 @@ public class UserService {
 
     // find by full name
     public List<UserModel> findbyFullname(String fullName) {
-        return userRepo.findByFullName(fullName);
+        
+        return userRepo.findByFullNameContainingIgnoreCase(fullName);
 
     }
 
@@ -49,6 +50,11 @@ public class UserService {
         String email = jwtProvider.getEmailFromToken(jwt);
        
         return findUserModelByEmail(email);
+    }
+
+    //find by unique key
+    public UserModel findByUniqueKey(String userSecret){
+        return userRepo.findByUserSecret(userSecret);
     }
 
     // login purpose
@@ -66,18 +72,26 @@ public class UserService {
     }
 
   //follow
-  public UserModel userFollow(String email,UserModel reqUser){
+  public UserModel userFollow(String userSecret,UserModel reqUser){
     
-    UserModel userToFollow = findUserModelByEmail(email);
+    
+    UserModel userToFollow = findByUniqueKey(userSecret);
+    
+
     if (reqUser.getFollowings().contains(userToFollow) && userToFollow.getFollowers().contains(reqUser)) {
         reqUser.getFollowings().remove(userToFollow);
         userToFollow.getFollowers().remove(reqUser);
+        userRepo.save(reqUser);
+        userRepo.save(userToFollow);
+        return userToFollow;
     }
+
     reqUser.getFollowings().add(userToFollow);
     userToFollow.getFollowers().add(reqUser);
-
+   
     userRepo.save(reqUser);
     userRepo.save(userToFollow);
+   
     return userToFollow;
   }
     
@@ -85,4 +99,36 @@ public class UserService {
   public List<UserModel> searchUsers(String keyword){
     return userRepo.findByFullNameContainingIgnoreCase(keyword);
   }
+
+
+// update profile
+  public UserModel updateUser(UserModel requester, String jwt ){
+       
+   UserModel user = findByJwtToken(jwt);
+
+    if (requester.getFullName()!="") {
+        user.setFullName(requester.getFullName());
+    }
+    if (requester.getWebsite()!="") {
+        user.setWebsite(requester.getWebsite());
+    }
+    if (requester.getAbout()!="") {
+        user.setAbout(requester.getAbout());
+    }
+    if (requester.getMobile()!="") {
+        user.setMobile(requester.getMobile());
+    }
+    if (requester.getProfilePic()!="") {
+        user.setProfilePic(requester.getProfilePic());
+    }
+    if (requester.getCoverImage()!="") {
+        user.setCoverImage(requester.getCoverImage());
+    }
+    if (requester.getUserLocation()!=null) {
+        user.setUserLocation(requester.getUserLocation());
+    }
+
+     userRepo.save(user);
+     return user;
+}
 }

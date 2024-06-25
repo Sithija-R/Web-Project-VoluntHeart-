@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
@@ -8,23 +8,33 @@ import { useState } from "react";
 import { Avatar, TextField } from "@mui/material";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import MapComponent from "../MapComponents/MapComponent";
+import { uploadMedia } from "../Homesection/Utilities/UploadHandle";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserProfile } from "../../Storage/Auth/Action";
 
 const ProfileModal = ({ open, handleClose }) => {
+
+  const {auth}=useSelector(Storage=>Storage)
+  const dispatch = useDispatch();
+
   const style = {
     outline: "none",
     top: "50%",
     left: "50%",
     position: "absolute",
     transform: "translate(-50%, -50%)",
-    width: 1000,
+    width:"fit",
     bgcolor: "background.paper",
     boxShadow: 24,
     px: 3,
     py: 2,
     borderRadius: 4,
+    
   };
-  // const [open, setOpen] = React.useState(false);
 
+
+  const [profilePic, setProfilePic] = useState("");
+  const [coverPic, setCoverPic] = useState("");
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [coverImagePreview, setCoverImagePreview] = useState(null);
 
@@ -34,56 +44,49 @@ const ProfileModal = ({ open, handleClose }) => {
     event.preventDefault();
   };
 
-  //Profile image handling
-  const handlePpDrop = (event) => {
+ 
+  const handlePpDrop = async (event) => {
     event.preventDefault();
-
     const file = event.dataTransfer.files[0];
-    previewPp(file);
-    setUploadImg(true);
-    formik.setFieldValue("profilePhoto", file);
-    setUploadImg(false);
+    setProfilePic(file);
+    const ppUrl = await uploadMedia(file);
+    formik.setFieldValue("profilePic",ppUrl)
+    setProfileImagePreview(ppUrl);
+   
+   
   };
 
-  const handlePpChange = (event) => {
+  const handlePpChange = async (event) => {
     const file = event.target.files[0];
-    previewPp(file);
+    setProfilePic(file);
+    const ppUrl = await uploadMedia(file);
+    formik.setFieldValue("profilePic",ppUrl);
+    setProfileImagePreview(ppUrl)
+  
   };
 
-  const previewPp = (file) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setProfileImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+
 
   //cover image
-  const handleCoverDrop = (e) => {
+  const handleCoverDrop = async(e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
-    previewCover(file);
-    setUploadImg(true);
-    formik.setFieldValue("coverImage", file);
-    setUploadImg(false);
+    setCoverPic(file);
+    const coverUrl = await uploadMedia(file);
+    formik.setFieldValue("coverImage",coverUrl)
+    setCoverImagePreview(coverUrl)
   };
 
-  const handleCoverChange = (e) => {
+  const handleCoverChange = async(e) => {
     const file = e.target.files[0];
-    previewCover(file);
+    setCoverPic(file);
+    const coverUrl = await uploadMedia(file);
+    formik.setFieldValue("coverImage",coverUrl)
+    setCoverImagePreview(coverUrl)
+   
   };
 
-  const previewCover = (file) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setCoverImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+
   //Location handling
   const [location, setLocation] = React.useState(null);
   const [address,setAddress]=useState('');
@@ -97,28 +100,26 @@ const ProfileModal = ({ open, handleClose }) => {
   };
 
   const handleLocationUpload=()=>{
-    formik.setFieldValue("location",location);
+    formik.setFieldValue("userLocation",location);
   }
 
 
 
-  const handleSubmit = (values) => {
-   
-    console.log("ehandle submit", values);
+  const handleSubmit = (values) => { 
+    dispatch(updateUserProfile(values));
+    console.log("handle submit", values);
+    handleClose();
     setLocation(null);
-  
-   
-  
   };
 
   const formik = useFormik({
     initialValues: {
-      fullName: "",
-      website: "",
-      location: "",
-      about: "",
+      fullName: auth.user.fullName,
+      website: auth.user.website,
+      userLocation: "",
+      about: auth.user.about,
       coverImage: "",
-      profilePhoto: "",
+      profilePic: "",
     },
     onSubmit: handleSubmit,
   });
@@ -132,7 +133,7 @@ const ProfileModal = ({ open, handleClose }) => {
   };
 
   return (
-    <div className="">
+    <div className=" bg-slate-500">
       <Modal
         open={open}
         onClose={handleClose}
@@ -140,8 +141,8 @@ const ProfileModal = ({ open, handleClose }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form onSubmit={formik.handleSubmit}>
-            <div className="flex items-center justify-between  text-gray-500 font-semibold mb-2">
+          <form onSubmit={formik.handleSubmit} className="flex-col">
+            <div className="flex items-center justify-between   text-gray-500 font-semibold mb-2">
               <p>Edit Profile</p>
               <CloseIcon
                 aria-label="close"
@@ -150,7 +151,7 @@ const ProfileModal = ({ open, handleClose }) => {
               />
             </div>
 
-            <div className="flex justify-around px-3 py-5 space-x-2  h-[77vh] overflow-y-scroll hideScrollBar">
+            <div className="flex flex-col sm:flex-row sm:w-full justify-around px-3 py-5 space-x-2 h-[77vh] overflow-y-scroll hideScrollBar">
               <div className="min-w-96 p-1 space-y-4">
                 <div className="space-y-2">
                   <label
@@ -171,12 +172,21 @@ const ProfileModal = ({ open, handleClose }) => {
                       hidden
                     />
                     <div className="flex items-center justify-between text-center bg-cover bg-center m-auto">
-                      {coverImagePreview ? (
-                        <img
-                          src={coverImagePreview}
-                          alt="Preview"
-                          className="flex w-[450px] h-[185px] overflow-hidden rounded-lg object-cover"
-                        />
+                      {coverPic ? (
+                        coverImagePreview?(
+                          <img
+                            src={coverImagePreview}
+                            alt="Preview"
+                            className="flex w-[450px] h-[185px] overflow-hidden rounded-lg object-cover"
+                          />
+                        ):(
+                          <img
+                            src="https://cdn.dribbble.com/users/1415337/screenshots/10781083/media/0466184625e53796cfeb7d5c5918dec8.gif"
+                            alt="Preview"
+                            className="flex w-[450px] h-[185px] overflow-hidden rounded-lg object-cover"
+                          />
+
+                        )
                       ) : (
                         <>
                           <AddPhotoAlternateIcon fontSize="large" />
@@ -219,12 +229,21 @@ const ProfileModal = ({ open, handleClose }) => {
                         bgcolor: "rgb(243 232 255)",
                       }}
                     >
-                      {profileImagePreview ? (
-                        <img
-                          src={profileImagePreview}
-                          alt="Preview"
-                          className="w-full h-full object-cover"
-                        />
+                      {profilePic ? (
+                        profileImagePreview?(
+                          <img
+                            src={profileImagePreview}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
+                        ):(
+                          <img
+                            src="https://cdn.dribbble.com/users/1415337/screenshots/10781083/media/0466184625e53796cfeb7d5c5918dec8.gif"
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
+
+                        )
                       ) : (
                         <>
                           <AddPhotoAlternateIcon fontSize="large" />
@@ -244,6 +263,7 @@ const ProfileModal = ({ open, handleClose }) => {
                     name="fullName"
                     label="Full Name"
                     onChange={formik.handleChange}
+                    value={formik.values.fullName}
                     error={
                       formik.touched.name && Boolean(formik.errors.fullName)
                     }
@@ -293,10 +313,10 @@ const ProfileModal = ({ open, handleClose }) => {
                 </Button>
                   </div>
                   <div className="-translate-y-4">
-                  <p>{address.village} </p>
-                  <p>{address.town} </p>
-                  <p>{address.city} </p>
-                  <p>{address.country}</p>
+                  <p>{address?.village} </p>
+                  <p>{address?.town} </p>
+                  <p>{address?.city} </p>
+                  <p>{address?.country}</p>
                   
                   
                  

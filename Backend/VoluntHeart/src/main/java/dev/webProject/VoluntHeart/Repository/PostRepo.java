@@ -18,4 +18,6 @@ public interface PostRepo extends MongoRepository<Posts, String> {
 
     public Posts findByUniqueKey(String uniqueKey);
 
+    public List<Posts> findByContentContainingIgnoreCase(String content);
+
 }

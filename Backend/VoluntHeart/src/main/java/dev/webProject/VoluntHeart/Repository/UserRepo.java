@@ -16,6 +16,7 @@ public interface UserRepo extends MongoRepository<UserModel, String> {
 
     public UserModel findByEmail(String email);
    
+  public UserModel findByUserSecret(String userSecret);
 
     public List<UserModel> findByFullNameContainingIgnoreCase(String fullName);
 

@@ -6,6 +6,9 @@ import {Route, Routes, useNavigate} from 'react-router-dom'
 import {useSelector,useDispatch} from 'react-redux'
 import { useEffect } from 'react';
 import { getUserProfile } from './Storage/Auth/Action';
+import Hero from './Components/LandingPage/Welcome';
+import AuthPage from './Authentication/AuthPage';
+import LandingPage from './Authentication/LandingPage';
 
 
 
@@ -21,8 +24,6 @@ useEffect(()=>{
   if(jwt){
     dispatch(getUserProfile(jwt))
     navigate("/")
-    
-
   }
 },[auth.jwt])
 
@@ -32,7 +33,11 @@ useEffect(()=>{
     <div className="">
       
     <Routes>
-      <Route path="/*" element={auth.user?<HomePage/>:<Authentication/>}>
+      <Route path="/*" element={auth.user?<HomePage/>:<LandingPage/>}>
+       
+
+      </Route>
+      <Route path='/Authentication/*' element={<AuthPage/>}>
 
       </Route>
     </Routes>

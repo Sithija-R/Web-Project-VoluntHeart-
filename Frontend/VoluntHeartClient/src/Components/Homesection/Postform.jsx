@@ -12,12 +12,20 @@ import CloseIcon from "@mui/icons-material/Close";
 import Modal from "@mui/material/Modal";
 import MapComponent from "../MapComponents/MapComponent";
 import { v4 as uuidv4 } from 'uuid';
+import MediaCarousel from "./Utilities/MediaCarousel";
+import { uploadMedia } from "./Utilities/UploadHandle";
+import { useDispatch } from "react-redux";
+import { createPost } from "../../Storage/Posts/Action";
+import AddLocationAltIcon from '@mui/icons-material/AddLocationAlt';
 
-const Postform = () => {
+
+const Postform = ({handleModalClose}) => {
+
+  const dispatch = useDispatch();
   const [uploadImage, setUploadImage] = useState(false);
-  const [selectedImage, setselectedImage] = useState("");
+  const [selectedImage, setselectedImage] = useState([]);
   const [uploadVideo, setUploadVideo] = useState(false);
-  const [selectedVideo, setSelectedVideo] = useState("");
+  const [selectedVideo, setSelectedVideo] = useState([]);
 
   const [imgPreview, setImgPreview] = useState(null);
   const [videoPreview, setVideoPreview] = useState(null);
@@ -34,12 +42,14 @@ const Postform = () => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 900,
+    width: "75vw",
+    
     bgcolor: "background.paper",
     outline: "none",
     boxShadow: 24,
     p: 4,
     borderRadius: "12px",
+    
   };
 
   const validationSchema = Yup.object().shape({
@@ -47,62 +57,61 @@ const Postform = () => {
   });
 
   const handleSubmit = (values, { resetForm }) => {
+    dispatch(createPost(values));
+    handleModalClose();
     console.log(values);
     resetForm();
-    setImgPreview("");
+    setselectedImage([]);
+    selectedVideo([]);
+   
+   
    
   };
 
   const formik = useFormik({
     initialValues: {
       content: "",
-      image: "",
-      video: "",
-      locationLat: "",
-      locationLng: "",
+      images: [],
+      videos: [],
+      location: ""
     },
     onSubmit: handleSubmit,
     validationSchema,
   });
 
-  const handleSelectImage = (e) => {
-    const img = e.target.files[0];
+  const handleSelectImage = async (e) => {
+   
+    const imgs = Array.from(e.target.files);
 
-    const uniqueName = `${uuidv4()}_${img.name}`;
-    const renamedFile = new File([img], uniqueName, { type: img.type });
-    formik.setFieldValue("image", renamedFile);
-    setselectedImage(URL.createObjectURL(renamedFile));
-    setUploadImage(false);
-    setImgPreview(URL.createObjectURL(renamedFile))
-    // previewImg(renamedFile);
+    const uploadedImages = await Promise.all(imgs.map(async (file) => {
+      console.log("file ",file)
+      const imgUrl = await uploadMedia(file);
+      return imgUrl;
+    }));
+
+    setselectedImage(uploadedImages);
+
+   
+   
+    formik.setFieldValue("images", uploadedImages);
+   
   };
 
-  // const previewImg = (imgUrl) => {
-  //   if (imgUrl) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       setImgPreview(reader.result);
-  //     };
-  //     reader.readAsDataURL(imgUrl);
-  //   }
-  // };
 
-  const handleSelectVideo = (e) => {
-    const videoUrl = e.target.files[0];
-    formik.setFieldValue("video", videoUrl);
-    setSelectedVideo(videoUrl);
-    setUploadVideo(false);
-    previewVideo(videoUrl);
+  const handleSelectVideo = async (e) => {
+    const video = Array.from(e.target.files);
+    const uploadedVideos = await Promise.all(video.map(async (file) => {
+      console.log("file ",file)
+      const videoUrl = await uploadMedia(file);
+      return videoUrl;
+    }));
+    
+    setSelectedVideo(uploadedVideos );
+    formik.setFieldValue("videos", uploadedVideos);
   };
-  const previewVideo = (videoUrl) => {
-    if (videoUrl) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setVideoPreview(reader.result);
-      };
-      reader.readAsDataURL(videoUrl);
-    }
-  };
+
+
+  
   //Location handling
   const [location, setLocation] = React.useState(null);
   const [address, setAddress] = useState("");
@@ -116,12 +125,20 @@ const Postform = () => {
   };
 
   const handleSelectLocation = () => {
-    formik.setFieldValue("locationLat", location.lat);
-    formik.setFieldValue("locationLng", location.lng);
+
+    formik.setFieldValue("location",location)
   };
 
+  useEffect(() => {
+    console.log('selectedImage updated: ', selectedImage);
+  }, [selectedImage]);
+  
+  useEffect(() => {
+    console.log('selectedvideo updated: ', selectedVideo);
+  }, [selectedVideo]);
+  
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} className="w-full">
       <div className="py-3 mb-5">
         <TextField
           fullWidth
@@ -136,34 +153,31 @@ const Postform = () => {
           helperText={formik.touched.content && formik.errors.content}
         />
       </div>
-      <div className="flex justify-between my-4">
-        {imgPreview ? (
-          <img
-            src={imgPreview}
-            alt="Preview"
-            className="flex w-[400px] h-[185px] overflow-hidden rounded-lg object-cover"
-          />
-        ) : (<></>)}
+     
+  
 
-        {videoPreview ? (
-          <video
-            className="w-[400px] h-[185px] overflow-hidden rounded-lg object-cover"
-            controls
-            onError={(e) => {
-              e.target.style.display = "none";
-            }}
-            src={videoPreview}
-          />
-        ) : ("")}
+<div className="flex">
+
+<div className="h-1/3 w-1/2">
+
+    <MediaCarousel mediaItems={selectedImage.map((file) => ({ type: 'image', url: file, name: file.name }))} />
+</div>
+<div className="h-1/3 w-1/2">
+
+    <MediaCarousel mediaItems={selectedVideo.map((file) => ({ type: 'video', url: file, name: file.name }))} />
+</div>
+</div>
+  
         
-      </div>
+   
 
-      <div className="flex justify-between items-center  pt-1">
+      <div className="flex justify-between items-center  pt-5">
         <div className="flex space-x-5 items-center">
           <label className="flex items-center space-x-2 rounded-md cursor-pointer">
             <AddPhotoAlternateIcon sx={{ color: "#1d9bf0" }} />
             <input
               type="file"
+              multiple
               name="imageFile"
               id="imagefile"
               className="hidden"
@@ -175,18 +189,18 @@ const Postform = () => {
             <VideoLibraryIcon sx={{ color: "#1d9bf0" }} />
             <input
               type="file"
+              multiple
               name="videoFile"
               id="videofile"
               className="hidden"
               onChange={handleSelectVideo}
             />
           </label>
-
-          <LocationOnIcon
-            sx={{ color: "#1d9bf0" }}
-            onClick={handleOpen}
-            className="cursor-pointer"
-          />
+    <AddLocationAltIcon
+    sx={{ color: "#1d9bf0" }}
+    onClick={handleOpen}
+    className="cursor-pointer"/>
+        
           <Modal
             open={open}
             onClose={handleClose}
@@ -207,10 +221,10 @@ const Postform = () => {
                 {location && (
                   <div className="">
                     <p>Selected Location:</p>
-                    <p>{address.village}</p>
-                    <p>{address.town}</p>
-                    <p>{address.city}</p>
-                    <p>{address.country}</p>
+                    <p>{address?.village} </p>
+                  <p>{address?.town} </p>
+                  <p>{address?.city} </p>
+                  <p>{address?.country}</p>
                   </div>
                 )}
                 <Button
@@ -227,6 +241,7 @@ const Postform = () => {
         </div>
         <div>
           <Button
+          
             sx={{
               width: "100%",
               borderRadius: "20px",
@@ -243,6 +258,7 @@ const Postform = () => {
           </Button>
         </div>
       </div>
+     
     </form>
   );
 };

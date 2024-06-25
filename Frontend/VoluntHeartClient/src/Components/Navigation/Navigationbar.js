@@ -7,6 +7,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PendingIcon from '@mui/icons-material/Pending';
+import InfoIcon from '@mui/icons-material/Info';
 
 export const navigation=[
 
@@ -52,5 +53,9 @@ export const navigation=[
         title:"More",
         icon:<PendingIcon/>,
         path:"/more"
-    },
+    },{
+        title:"About",
+        icon:<InfoIcon/>,
+        path:"/about"
+    }
 ]

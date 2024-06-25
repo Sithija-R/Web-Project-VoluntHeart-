@@ -12,6 +12,7 @@ import org.bson.types.ObjectId;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import dev.webProject.VoluntHeart.ChatServices.Message;
 import dev.webProject.VoluntHeart.Models.Location;
 import dev.webProject.VoluntHeart.Models.Posts;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class UserModel {
     @Id
     String userId;
 
+    String userSecret;
     String email;
     String password;
     String fullName;
@@ -31,6 +33,7 @@ public class UserModel {
     String about;
     String profilePic;
     String coverImage;
+    
     boolean donor;
     Location userLocation;
     private boolean googleLogin;
@@ -43,8 +46,11 @@ public class UserModel {
     @DocumentReference
     List<Posts> likedPosts = new ArrayList<>();
 
+    @DocumentReference
     List<UserModel> followers = new ArrayList<>();
-    
+    @DocumentReference
     List<UserModel> followings = new ArrayList<>();
+
+    List<Message> chatList = new ArrayList<>();
 
 }

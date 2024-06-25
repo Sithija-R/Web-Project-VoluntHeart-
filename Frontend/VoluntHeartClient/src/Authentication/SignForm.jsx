@@ -47,9 +47,7 @@ const SignForm = () => {
     dispatch(fundRegister(values));
   }
 
-const handleClick=()=>{
-  console.log("clicked")
-}
+
 
   const onGoogleSuccess = async (credentialResponse) => {
     const decodeCredentials = jwtDecode(credentialResponse.credential);
@@ -97,7 +95,7 @@ const handleClick=()=>{
 
 
   return (
-    <div className=" px-1 flex-col space-y-2 text-center">
+    <div className=" w-full px-1 flex-col space-y-2 text-center">
       <h1 className=" font-semibold text-xl ">Signup</h1>
 
       <Box sx={{ width: "100%" }}>
@@ -127,7 +125,8 @@ const handleClick=()=>{
             >
               <TextField
                 fullWidth
-                size="small"
+                variant="filled"
+                color="success"
                 id="fullName"
                 name="fullName"
                 label="Full Name"
@@ -144,7 +143,8 @@ const handleClick=()=>{
               />
               <TextField
                 fullWidth
-                size="small"
+                variant="filled"
+                color="success"
                 id="email"
                 name="email"
                 label="Email"
@@ -161,9 +161,10 @@ const handleClick=()=>{
 
               <TextField
                 fullWidth
-                size="small"
                
+                variant="filled"
                 id="password"
+                color="success"
                 name="password"
                 label="Password"
                 type="password"
@@ -179,19 +180,25 @@ const handleClick=()=>{
                 }
               />
 
-              <div className="flex items-end justify-center ">
+              <div className="flex w-full items-end justify-center ">
                 <Button
                   sx={{
-                    width: "100%",
-                    borderRadius: "5px",
-                    py: "5px",
-                    backgroundColor: "green",
+                    
+                      width: "50%",
+                      height:"6vh",
+                      borderRadius: "25px",
+              py: "10px",
+              backgroundColor: "#0cac74",
                     "&:hover": { bgcolor: "darkgreen" },
                     lg: "2",
                     xs: "1",
+                    fontSize: 18,
+                  
+                    
                   }}
                   variant="contained"
                   type="submit"
+                 
             
                 >
                   Register
@@ -221,12 +228,15 @@ const handleClick=()=>{
                 <GoogleLogin
                   text="signup_with"
                  
-                   
-                  width={500}
+                  
+                  width={350}
+                  shape="pill"
+                  theme="filled_blue"
+                  size="large"
                
                   onSuccess={onGoogleSuccess}
                   onError={onGoogleFailure}
-             
+                  
                 />
               </div>
             </div>
@@ -235,11 +245,12 @@ const handleClick=()=>{
           <TabPanel value="2">
             <form
               onSubmit={fundraiserFormik.handleSubmit}
-              className="w-full  flex-col space-y-2 "
+              className="w-full flex-col space-y-2 "
             >
               <TextField
                 fullWidth
-                size="small"
+                color="success"
+                variant="filled"
                 id="fullName"
                 name="fullName"
                 label="Full Name"
@@ -257,7 +268,8 @@ const handleClick=()=>{
               />
               <TextField
                 fullWidth
-                size="small"
+                color="success"
+                variant="filled"
                 id="email"
                 name="email"
                 label="Email"
@@ -275,7 +287,8 @@ const handleClick=()=>{
               />
               <TextField
                 fullWidth
-                size="small"
+                color="success"
+                variant="filled"
                 id="regNumber"
                 name="regNumber"
                 label="Registration Number"
@@ -294,8 +307,8 @@ const handleClick=()=>{
 
               <TextField
                 fullWidth
-                size="small"
-                multilined={false}
+                color="success"
+                variant="filled"
                 id="password"
                 name="password"
                 label="Password"
@@ -313,13 +326,15 @@ const handleClick=()=>{
                 }
               />
 
-              <div className="flex items-end justify-center ">
+              <div className="flex w-full items-end justify-center ">
                 <Button
                   sx={{
-                    width: "100%",
-                    borderRadius: "5px",
-                    py: "5px",
-                    backgroundColor: "green",
+                    width: "50%",
+                    height:"6vh",
+                    fontSize: 18,
+                    borderRadius: "25px",
+                    py: "10px",
+                    backgroundColor: "#0cac74",
                     "&:hover": { bgcolor: "darkgreen" },
                     lg: "2",
                     xs: "1",
@@ -344,9 +359,7 @@ const handleClick=()=>{
           </TabPanel>
         </TabContext>
       </Box>
-      <form action="">
-        <input type="text" />
-      </form>
+     
     </div>
   );
 };

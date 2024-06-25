@@ -42,7 +42,7 @@ public class AppConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors((cors) -> cors.configurationSource(corsConfigurationSource()))
                 .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
+                
               
                
                

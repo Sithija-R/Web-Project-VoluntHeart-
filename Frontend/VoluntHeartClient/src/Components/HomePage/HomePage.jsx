@@ -1,71 +1,92 @@
-import React, { useEffect } from "react";
-import { Grid } from "@mui/material";
-import Navigation from "../Navigation/Navigation";
+import React, { useState } from "react";
+import { Grid, Hidden } from "@mui/material";
+
 import Homesection from "../Homesection/Homesection";
-import { Hidden } from "@mui/material";
-import Rightsection from "../RightSection/Rightsection"
-import DarkModeIcon from '@mui/icons-material/DarkMode';
+import Rightsection from "../RightSection/Rightsection";
+
 import { Route, Routes } from "react-router-dom";
 import Profile from "../Profile/Profile";
+import UserProfile from "../UserUtilities/UserProfile";
+import Chat from "../Chat/Chat";
+
+
+import About from "../About/About";
+
+import Navbar from "./Navbar";
+import LeftSection from "../LeftSection/LeftSection";
+
 const HomePage = () => {
+  const [isNavVisible, setIsNavVisible] = useState(false);
 
+  const handleTheme = () => {
+    console.log('handle theme');
+  };
 
-const handleTheme=()=>{
-  console.log('handle theme');
-}
-useEffect(() => {
- 
-}, []);
 
 
   return (
     <>
-      <header className=" fixed w-full bg-gray-500 h-16 py-1 px-14 flex items-center justify-between">
-        <div className="py-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="-11.5 -10.23174 23 20.46348"
-            width="50"
-          >
-            <title>React Logo</title>
-            <circle cx="0" cy="0" r="2.05" fill="#61dafb" />
-            <g stroke="#61dafb" stroke-width="1" fill="none">
-              <ellipse rx="11" ry="4.2" />
-              <ellipse rx="11" ry="4.2" transform="rotate(60)" />
-              <ellipse rx="11" ry="4.2" transform="rotate(120)" />
-            </g>
-          </svg>
-        </div>
-        <div className="cursor-pointer">
-          <DarkModeIcon onClick={handleTheme}/>
-        </div>
+      <header className="fixed w-full px-4 z-10">
+        <Navbar/>
       </header>
 
       <Grid
         container
-        xs={12}
-        className="fixed top-16  px-5 lg-10 flex-column justify-between bg-slate-200 -z-10"
+        className="fixed top-16 w-full flex justify-between bg-slate-0 bg-slate-100 "
       >
-        <Grid item xs={0} lg={2} className="  max-w-10  bg-lime-100 hidden-xs">
-          <Hidden lgDown>
-            <Navigation />
-          </Hidden>
-        </Grid>
+       
 
-        <Grid item xs={10} lg={6} className="  bg-amber-100 " sx={{height:'92vh'}}>
 
-          <Routes>
-            <Route path="/" element={ <Homesection />}></Route>
-            <Route path="/home/" element={ <Homesection />}></Route>
-            <Route path="/profile/" element={ <Profile/>}></Route>
-          </Routes>
+        <Grid
+        xs={0}
+         sm={0}
+          md={0}
+          lg={2.5}
+          className={` py-5 pl-3`}
          
+        >
+          <Hidden lgDown>
+          <LeftSection/>
+
+          </Hidden>
+
+        </Grid>
+       
+      
+       
+        <Grid
+         
+          xs={11.5}
+          sm={11.5}
+          md={8}
+          lg={6.5}
+          className={`  `}
+          sx={{ height: '92vh' }}
+        >
+          <Routes>
+            <Route path="/" element={<Homesection />} />
+            <Route path="/home" element={<Homesection />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:userSecret" element={<UserProfile />} />
+            <Route path="/messages" element={<Chat />} />
+            <Route path="/messages/:userSecret" element={<Chat />} />
+            <Route path="/about" element={<About />} />
+
+          </Routes>
         </Grid>
 
-        <Grid item xs={0} lg={3} className="  bg-red-100">
-          <Hidden lgDown>
-            <Rightsection/>
-          </Hidden>
+        <Grid
+          item
+          xs={0}
+          sm={0}
+           md={3.5}
+          lg={2.7}
+          className=""
+          sx={{ height: '92vh' }}
+        >
+         
+            <Rightsection />
+         
         </Grid>
       </Grid>
     </>

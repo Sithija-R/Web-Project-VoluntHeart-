@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { googleLoginhandler, userLogin } from "../Storage/Auth/Action";
 import { jwtDecode } from "jwt-decode";
-import Swal from 'sweetalert2'
+
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -60,15 +60,20 @@ const LoginForm = () => {
   };
 
   return (
-    <div className=" px-12 flex-col space-y-8 text-center">
-      <h1 className=" font-semibold text-xl ">Login</h1>
+    <div className=" w-full  px-12 flex-col space-y-8 text-center">
+      <h1 className=" font-semibold text-xl sticky top-5">Login</h1>
 
       <form
         onSubmit={formik.handleSubmit}
         className="w-full  flex-col space-y-5"
       >
+
+        
         <TextField
+         
+         variant="filled"
           fullWidth
+          color="success"
           multilined
           id="email"
           name="email"
@@ -81,7 +86,11 @@ const LoginForm = () => {
         />
 
         <TextField
+        
+         variant="filled"
+        
           fullWidth
+          color="success"
           multilined={false}
           id="password"
           name="password"
@@ -94,13 +103,16 @@ const LoginForm = () => {
           helperText={formik.touched.password && formik.errors.password}
         />
 
-        <div className="flex items-end justify-center ">
+        <div className="flex w-full items-end justify-center ">
           <Button
             sx={{
-              width: "100%",
-              borderRadius: "5px",
+            
+                width: "50%",
+                height:"6vh",
+                fontSize: 18,
+              borderRadius: "25px",
               py: "10px",
-              backgroundColor: "green",
+              backgroundColor: "#0cac74",
               "&:hover": { bgcolor: "darkgreen" },
               lg: "2",
               xs: "1",
@@ -116,7 +128,7 @@ const LoginForm = () => {
         Don't have an account?{" "}
         <span
           className="cursor-pointer text-blue-600"
-          onClick={() => navigate("/authentication/signin/")}
+          onClick={()=>navigate("/authentication/signup")}
         >
           Signup
         </span>
@@ -132,7 +144,11 @@ const LoginForm = () => {
           text="continue_with"
                  
                    
-          width={500}
+           
+          width={350}
+          shape="pill"
+          theme="filled_blue"
+          size="large"
           onSuccess={onGoogleSuccess}
           onError={onGoogleFailure}
         />

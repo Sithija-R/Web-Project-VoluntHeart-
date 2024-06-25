@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.webProject.VoluntHeart.DTO.LikeDTO;
 import dev.webProject.VoluntHeart.DTOmapper.LikeDTOmapper;
 import dev.webProject.VoluntHeart.Models.LikeModel;
-import dev.webProject.VoluntHeart.Models.Users.UserModel;
+
 import dev.webProject.VoluntHeart.Service.LikeService;
 import dev.webProject.VoluntHeart.Service.UserService;
 
@@ -34,7 +34,6 @@ public class LikeController {
     public ResponseEntity<LikeDTO> likePost(@PathVariable String uniqueKey, @RequestHeader("Authorization") String jwt){
          
         String email = jwt;
-        
         
         LikeModel like = likeService.likeHandler(email,uniqueKey);
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SuggestionCard = () => {
+const SuggestionCard = ({item}) => {
 
     const handleSuggestions=()=>{
         console.log('handle sugge');
@@ -8,9 +8,9 @@ const SuggestionCard = () => {
 
     
   return (
-    <div className='bg-green-200 p-3 rounded-lg ' onClick={handleSuggestions}>
-        <h2 className='font-semibold mb-1'>Topic</h2>
-        <p>Section tells browsers and screen readers that the content inside it should be </p>
+    <div className=' p-3 rounded-lg shadow-md border-[px] ' onClick={handleSuggestions}>
+
+        <p className='mb-1'>{item.title}</p>
     </div>
   )
 }

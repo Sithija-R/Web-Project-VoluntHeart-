@@ -2,9 +2,6 @@ package dev.webProject.VoluntHeart.DTO;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.bson.types.ObjectId;
-
 import dev.webProject.VoluntHeart.Models.Location;
 import lombok.Data;
 
@@ -13,6 +10,7 @@ public class UserDTO {
 
    
     String userId;
+    String userSecret;
 
     String email;
     String fullName;
@@ -20,6 +18,7 @@ public class UserDTO {
     String mobile;
     String about;
     String profilePic;
+    String regNumber;
     String coverImage;
     boolean donor;
     Location userLocation;
@@ -29,6 +28,7 @@ public class UserDTO {
 
     private List<UserDTO> followers = new ArrayList<>();
     private List<UserDTO> following = new ArrayList<>();
+   
 
     
     
