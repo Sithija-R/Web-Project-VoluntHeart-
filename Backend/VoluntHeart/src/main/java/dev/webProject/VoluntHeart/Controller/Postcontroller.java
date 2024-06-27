@@ -1,7 +1,6 @@
 package dev.webProject.VoluntHeart.Controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import dev.webProject.VoluntHeart.DTO.PostDataDTO;
 import dev.webProject.VoluntHeart.DTO.PostsDTO;
 import dev.webProject.VoluntHeart.DTOmapper.PostsDTOmapper;
@@ -21,7 +19,6 @@ import dev.webProject.VoluntHeart.Models.Users.UserModel;
 import dev.webProject.VoluntHeart.Response.ApiResponse;
 import dev.webProject.VoluntHeart.Service.PostService;
 import dev.webProject.VoluntHeart.Service.UserService;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -94,15 +91,7 @@ public class Postcontroller {
         
     }
 
-    // public ResponseEntity<PostsDTO> createPost(@RequestBody Posts
-    // req,@RequestHeader("Authorization") String jwt){
-    // UserModel creator = userService.findByJwtToken(jwt);
-    // Posts newPost= postService.createPosts(null, creator);
-
-    // PostsDTO postsDTO = PostsDTOmapper.mapToPostsDTO(newPost, creator);
-    // return new ResponseEntity<>(postsDTO,HttpStatus.CREATED);
-
-    // }
+  
 @GetMapping("/search/{keyword}")
 public ResponseEntity<List<PostsDTO>> searchByContent(@PathVariable String keyword, @RequestHeader("Authorization") String jwt){
    

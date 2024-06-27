@@ -2,16 +2,10 @@ package dev.webProject.VoluntHeart.Models.Users;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.MongoId;
-import org.bson.types.ObjectId;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import dev.webProject.VoluntHeart.ChatServices.Message;
 import dev.webProject.VoluntHeart.Models.Location;
 import dev.webProject.VoluntHeart.Models.Posts;

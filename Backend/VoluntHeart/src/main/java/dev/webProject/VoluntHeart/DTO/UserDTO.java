@@ -11,7 +11,6 @@ public class UserDTO {
    
     String userId;
     String userSecret;
-
     String email;
     String fullName;
     String website;
@@ -23,9 +22,8 @@ public class UserDTO {
     boolean donor;
     Location userLocation;
     private boolean googleLogin;
-
     private boolean isFollowed;
-
+    
     private List<UserDTO> followers = new ArrayList<>();
     private List<UserDTO> following = new ArrayList<>();
    

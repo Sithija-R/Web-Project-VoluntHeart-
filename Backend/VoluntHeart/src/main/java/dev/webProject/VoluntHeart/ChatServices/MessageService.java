@@ -1,8 +1,4 @@
 package dev.webProject.VoluntHeart.ChatServices;
-
-
-
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,8 +15,6 @@ public class MessageService {
 
     @Value("${talkjs.secretKey}")
     private String secretKey;
-
-
 
     public ResponseEntity<String> deleteMessage(String conversationId) {
         String url = String.format("https://api.talkjs.com/v1/%s/conversations/%s", appId, conversationId);

@@ -1,13 +1,9 @@
 package dev.webProject.VoluntHeart.Service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 import dev.webProject.VoluntHeart.Models.Users.FundraiserModel;
-
 import dev.webProject.VoluntHeart.Repository.FundraiserRepo;
 
 @Service

@@ -1,5 +1,4 @@
 package dev.webProject.VoluntHeart.ChatServices;
-
 import lombok.Data;
 
 @Data

@@ -1,10 +1,8 @@
 package dev.webProject.VoluntHeart.DTOmapper;
 
 import dev.webProject.VoluntHeart.DTO.LikeDTO;
-import dev.webProject.VoluntHeart.DTO.PostsDTO;
-import dev.webProject.VoluntHeart.DTO.UserDTO;
 import dev.webProject.VoluntHeart.Models.LikeModel;
-import dev.webProject.VoluntHeart.Models.Users.UserModel;
+
 
 public class LikeDTOmapper {
     

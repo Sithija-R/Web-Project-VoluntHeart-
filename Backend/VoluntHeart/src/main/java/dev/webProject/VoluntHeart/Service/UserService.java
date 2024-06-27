@@ -3,13 +3,11 @@ package dev.webProject.VoluntHeart.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import dev.webProject.VoluntHeart.Configuration.JwtProvider;
 import dev.webProject.VoluntHeart.Models.Users.UserModel;
 import dev.webProject.VoluntHeart.Repository.UserRepo;

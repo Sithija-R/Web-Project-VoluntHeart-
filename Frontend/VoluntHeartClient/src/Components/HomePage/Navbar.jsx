@@ -54,7 +54,7 @@ const Navbar = () => {
       });
 
       session = new Talk.Session({
-        appId: "tUOECsOe",
+        appId: "tdjK1fO6",
         me: me,
       });
 
@@ -112,8 +112,8 @@ const Navbar = () => {
         </li>
         <li className="profile " onClick={() => navigate("/Profile")}>
           <Avatar
-            sx={{ width: "3rem", height: "3rem", border: "1px solid white" }}
             src={auth.user?.profilePic}
+            sx={{ width: "3rem", height: "3rem", border: "1px solid white" }}
           />
           <div>
             <p className="ml-2">{auth.user?.fullName}</p>

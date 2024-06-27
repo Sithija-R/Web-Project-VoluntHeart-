@@ -86,6 +86,7 @@ const Postform = ({handleModalClose}) => {
     const uploadedImages = await Promise.all(imgs.map(async (file) => {
       console.log("file ",file)
       const imgUrl = await uploadMedia(file);
+      console.log("imgurl ",imgUrl)
       return imgUrl;
     }));
 
@@ -103,6 +104,7 @@ const Postform = ({handleModalClose}) => {
     const uploadedVideos = await Promise.all(video.map(async (file) => {
       console.log("file ",file)
       const videoUrl = await uploadMedia(file);
+      console.log("vdeourl ",videoUrl)
       return videoUrl;
     }));
     
