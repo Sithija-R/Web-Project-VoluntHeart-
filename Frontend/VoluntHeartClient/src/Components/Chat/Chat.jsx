@@ -37,7 +37,7 @@ const Chat = () => {
       });
 
       session = new Talk.Session({
-        appId: "tUOECsOe",
+        appId: "tdjK1fO6",
         me: me,
       });
 

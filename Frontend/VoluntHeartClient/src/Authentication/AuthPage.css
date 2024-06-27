@@ -38,7 +38,7 @@
     z-index: 5;
     transition: 1s 0.7s ease-in-out;
 }
-section{
+.sign-in-form,.sign-up-form{
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -47,13 +47,12 @@ section{
     flex-direction: column;
     grid-column: 1/2;
     grid-row: 1/2;
-    transition: 0.2s 0.7s ease-in-out;
+    transition: 0.2s 0.7s ease-in-out;}
     
-}
-section.sign-in-form{
+.sign-in-form{
     z-index: 2;
 }
-section.sign-up-form{
+.sign-up-form{
     z-index: 1;
     opacity: 0;
 }

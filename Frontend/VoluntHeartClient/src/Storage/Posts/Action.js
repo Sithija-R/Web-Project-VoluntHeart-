@@ -85,7 +85,7 @@ export const createPost=(postData)=>async(dispatch)=>{
 export const likePost=(postId)=>async(dispatch)=>{
 
     try {
-        const {data} = await api.post(`/like/${postId}`);
+        const {data} = await api.post(`/api/like/${postId}`);
       
         dispatch({type:LIKE_POST_SUCCESS,payload:data})
         
@@ -129,7 +129,7 @@ export const getSuggestions = (keyword) => async (dispatch) => {
 
   
       
-      const {data}= await axios.get(`http://localhost:5555/suggestios/${keyword}`);
+      const {data}= await axios.get(`https://voluntheartmlmodel.zeabur.app/suggestios/${keyword}`);
      
      
 
