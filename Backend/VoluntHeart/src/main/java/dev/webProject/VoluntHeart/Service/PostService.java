@@ -5,8 +5,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import co.elastic.clients.elasticsearch.cluster.reroute.Command;
 import dev.webProject.VoluntHeart.DTO.PostDataDTO;
 import dev.webProject.VoluntHeart.Exception.UserException;
 import dev.webProject.VoluntHeart.Models.Comment;

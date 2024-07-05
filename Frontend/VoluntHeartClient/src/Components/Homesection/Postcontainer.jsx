@@ -196,7 +196,7 @@ const locationurl = `https://maps.google.com/maps?q=${item.location?.lat},${item
           } space-x-3 flex cursor-pointer`}
         >
           <FavoriteIcon onClick={handleLike} />
-          <p className="font-medium"> {item.totalLikes}</p>
+          <p className="font-medium cursor-pointer"> {item.totalLikes}</p>
         </div>
         <ChatBubbleIcon className="cursor-pointer" onClick={togggleComment} />
         {/* <ShareIcon className="cursor-pointer" onClick={handleShare} /> */}

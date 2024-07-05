@@ -1,7 +1,5 @@
 package dev.webProject.VoluntHeart.Models.Users;
 
-
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
