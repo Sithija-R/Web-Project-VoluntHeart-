@@ -71,14 +71,13 @@ const Chat = () => {
       if (talkjsContainerRef.current) {
         inbox.mount(talkjsContainerRef.current);
       }
-    
+
       session.unreads.onChange((unreadConversations) => {
         const amountOfUnreads = unreadConversations.length;
         console.log("unread form chat", amountOfUnreads);
       });
     };
-      initializeTalk();
-
+    initializeTalk();
 
     return () => {
       if (session) {
@@ -99,8 +98,8 @@ const Chat = () => {
   };
 
   return (
-    <div className="h-full w-full mt-6 px-2 bg-white rounded-xl" > 
-    <div className="flex items-center sticky top-5 bg-opacity-95 mt-3 mb-1 ">
+    <div className="h-full w-full mt-6 px-2 bg-white rounded-xl">
+      <div className="flex items-center sticky top-5 bg-opacity-95 mt-3 mb-1 ">
         <ArrowBackIcon className="cursor-pointer" onClick={handleBack} />
         <h1
           className="text-lg opacity-90 ml-2 cursor-pointer"
@@ -112,7 +111,7 @@ const Chat = () => {
       <h2 className="text-lg font-bold opacity-90 mt-1 mb-2 pl-1">Chats</h2>
       <div
         id="talkjs-container"
-        style={{ height: "86%", width: "100%" }}
+        style={{ height: "75vh", width: "100%" }}
         ref={talkjsContainerRef}
       ></div>
     </div>

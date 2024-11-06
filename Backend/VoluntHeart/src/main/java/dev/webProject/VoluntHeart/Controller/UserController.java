@@ -72,7 +72,7 @@ public class UserController {
     UserDTO usertoFollowDTO = UserDTOmapper.mapToUserDTO(userTofollow);
 
     boolean followstatus =checkFollowStatus(followRequestor, userTofollow);
-    usertoFollowDTO.setFollowed(followstatus);
+    usertoFollowDTO.setFollowed(followstatus);      
    
 
     return new ResponseEntity<>(usertoFollowDTO,HttpStatus.ACCEPTED);
@@ -88,7 +88,7 @@ public class UserController {
 @PostMapping("profile/update")
 public ResponseEntity<UserDTO> updateUser(@RequestBody UserModel userData, @RequestHeader("Authorization") String jwt){
   
-  System.out.println(userData);
+
   UserModel updatedUser = userService.updateUser(userData, jwt);
   UserDTO updatedUserDTO = UserDTOmapper.mapToUserDTO(updatedUser);
 

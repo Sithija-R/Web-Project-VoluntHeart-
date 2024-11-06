@@ -1,12 +1,13 @@
-from flask import Flask, jsonify, request
+
+from flask import Flask
 from flask_cors import CORS
-import pickle
 import pandas as pd
+import pickle
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)  
 
 
 with open('countvectorizer.pkl', 'rb') as file:
@@ -19,7 +20,7 @@ with open('volunteering_data.pkl', 'rb') as file:
     volunteering_data = pickle.load(file)
 
 
-def recommend_opportunities(user_input, data, vectorizer, vector_matrix, top_n=7):
+def recommend_opportunities(user_input, data, vectorizer, vector_matrix, top_n=10):
     user_input_vector = vectorizer.transform([user_input]).toarray()
     similarities = cosine_similarity(user_input_vector, vector_matrix).flatten()
     top_indices = similarities.argsort()[::-1][:top_n]

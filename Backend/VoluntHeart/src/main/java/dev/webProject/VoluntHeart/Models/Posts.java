@@ -25,6 +25,8 @@ private LocalDateTime createdAt;
 private UserModel createdBy;
 
 private List<Comment> comments = new ArrayList<>();
+
+@DocumentReference
 private List<Media> media = new ArrayList<>();
 
 @DocumentReference

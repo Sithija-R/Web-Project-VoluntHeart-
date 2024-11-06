@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from 'react'
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
@@ -13,8 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUserProfile } from "../../Storage/Auth/Action";
 
 const ProfileModal = ({ open, handleClose }) => {
-
-  const {auth}=useSelector(Storage=>Storage)
+  const { auth } = useSelector((Storage) => Storage);
   const dispatch = useDispatch();
 
   const style = {
@@ -23,89 +22,76 @@ const ProfileModal = ({ open, handleClose }) => {
     left: "50%",
     position: "absolute",
     transform: "translate(-50%, -50%)",
-    width:"fit",
+    width: "fit",
     bgcolor: "background.paper",
     boxShadow: 24,
     px: 3,
     py: 2,
     borderRadius: 4,
-    
   };
-
 
   const [profilePic, setProfilePic] = useState("");
   const [coverPic, setCoverPic] = useState("");
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [coverImagePreview, setCoverImagePreview] = useState(null);
 
-  const [uploadImg, setUploadImg] = React.useState(false);
 
   const handleDragOver = (event) => {
     event.preventDefault();
   };
 
- 
   const handlePpDrop = async (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
     setProfilePic(file);
     const ppUrl = await uploadMedia(file);
-    formik.setFieldValue("profilePic",ppUrl)
+    formik.setFieldValue("profilePic", ppUrl);
     setProfileImagePreview(ppUrl);
-   
-   
   };
 
   const handlePpChange = async (event) => {
     const file = event.target.files[0];
     setProfilePic(file);
     const ppUrl = await uploadMedia(file);
-    formik.setFieldValue("profilePic",ppUrl);
-    setProfileImagePreview(ppUrl)
-  
+    formik.setFieldValue("profilePic", ppUrl);
+    setProfileImagePreview(ppUrl);
   };
 
-
-
   //cover image
-  const handleCoverDrop = async(e) => {
+  const handleCoverDrop = async (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     setCoverPic(file);
     const coverUrl = await uploadMedia(file);
-    formik.setFieldValue("coverImage",coverUrl)
-    setCoverImagePreview(coverUrl)
+    formik.setFieldValue("coverImage", coverUrl);
+    setCoverImagePreview(coverUrl);
   };
 
-  const handleCoverChange = async(e) => {
+  const handleCoverChange = async (e) => {
     const file = e.target.files[0];
     setCoverPic(file);
     const coverUrl = await uploadMedia(file);
-    formik.setFieldValue("coverImage",coverUrl)
-    setCoverImagePreview(coverUrl)
-   
+    formik.setFieldValue("coverImage", coverUrl);
+    setCoverImagePreview(coverUrl);
   };
-
 
   //Location handling
   const [location, setLocation] = React.useState(null);
-  const [address,setAddress]=useState('');
+  const [address, setAddress] = useState("");
 
   const handleMapClick = (clickedLocation) => {
     setLocation(clickedLocation);
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${clickedLocation.lat}&lon=${clickedLocation.lng}`;
-    fetch(url).then(res=>res.json()).then(data=>setAddress(data.address) )
-    
-   
+    fetch(url)
+      .then((res) => res.json())
+      .then((data) => setAddress(data.address));
   };
 
-  const handleLocationUpload=()=>{
-    formik.setFieldValue("userLocation",location);
-  }
+  const handleLocationUpload = () => {
+    formik.setFieldValue("userLocation", location);
+  };
 
-
-
-  const handleSubmit = (values) => { 
+  const handleSubmit = (values) => {
     dispatch(updateUserProfile(values));
     console.log("handle submit", values);
     handleClose();
@@ -125,11 +111,11 @@ const ProfileModal = ({ open, handleClose }) => {
   });
 
   const handleImageUpload = (e) => {
-    setUploadImg(true);
+   
     const { name } = e.target;
     const file = e.target.files[0];
     formik.setFieldValue(name, file);
-    setUploadImg(false);
+    
   };
 
   return (
@@ -173,19 +159,18 @@ const ProfileModal = ({ open, handleClose }) => {
                     />
                     <div className="flex items-center justify-between text-center bg-cover bg-center m-auto">
                       {coverPic ? (
-                        coverImagePreview?(
+                        coverImagePreview ? (
                           <img
                             src={coverImagePreview}
                             alt="Preview"
                             className="flex w-[450px] h-[185px] overflow-hidden rounded-lg object-cover"
                           />
-                        ):(
+                        ) : (
                           <img
                             src="https://cdn.dribbble.com/users/1415337/screenshots/10781083/media/0466184625e53796cfeb7d5c5918dec8.gif"
                             alt="Preview"
                             className="flex w-[450px] h-[185px] overflow-hidden rounded-lg object-cover"
                           />
-
                         )
                       ) : (
                         <>
@@ -230,19 +215,18 @@ const ProfileModal = ({ open, handleClose }) => {
                       }}
                     >
                       {profilePic ? (
-                        profileImagePreview?(
+                        profileImagePreview ? (
                           <img
                             src={profileImagePreview}
                             alt="Preview"
                             className="w-full h-full object-cover"
                           />
-                        ):(
+                        ) : (
                           <img
                             src="https://cdn.dribbble.com/users/1415337/screenshots/10781083/media/0466184625e53796cfeb7d5c5918dec8.gif"
                             alt="Preview"
                             className="w-full h-full object-cover"
                           />
-
                         )
                       ) : (
                         <>
@@ -292,44 +276,31 @@ const ProfileModal = ({ open, handleClose }) => {
                     label="Email or Website"
                     value={formik.values.website}
                     onChange={formik.handleChange}
-                    error={formik.touched.website && Boolean(formik.errors.website)}
+                    error={
+                      formik.touched.website && Boolean(formik.errors.website)
+                    }
                     helperText={formik.touched.website && formik.errors.website}
                   />
                 </div>
               </div>
               <div className=" w-96 space-y-1">
                 <p>Add Location</p>
-                
+
                 <MapComponent
                   selectedLocation={location}
-                  
                   onMapClick={handleMapClick}
-                  style={{borderRadius:"2px"}}
+                  style={{ borderRadius: "2px" }}
                 />
-                  <div className="flex justify-between">
+                <div className="flex justify-between">
                   <p>Selected Location:</p>
-                  <Button onClick={handleLocationUpload}>
-                  set
-                </Button>
-                  </div>
-                  <div className="-translate-y-4">
+                  <Button onClick={handleLocationUpload}>set</Button>
+                </div>
+                <div className="-translate-y-4">
                   <p>{address?.village} </p>
                   <p>{address?.town} </p>
                   <p>{address?.city} </p>
                   <p>{address?.country}</p>
-                  
-                  
-                 
-
-                  </div>
-                 
-                  
-                  
-                
-
-                
-                  
-                
+                </div>
               </div>
             </div>
             <div className="flex items-end justify-end text-lg font-semibold">

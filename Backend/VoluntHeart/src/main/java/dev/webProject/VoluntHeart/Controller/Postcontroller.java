@@ -1,3 +1,4 @@
+
 package dev.webProject.VoluntHeart.Controller;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class Postcontroller {
     public ResponseEntity<List<PostsDTO>> getAllPosts( @RequestHeader("Authorization") String jwt) {
         
         UserModel user = userService.findByJwtToken(jwt);
+        
 
         List<Posts> allPosts = postService.allPosts();
         List<PostsDTO> allPostsDTO = PostsDTOmapper.toListOfPostDTOs(allPosts, user);
@@ -78,7 +80,7 @@ public class Postcontroller {
 
 
     //create post
-    @PostMapping("/create")
+    @PostMapping("/create") 
     public ResponseEntity<PostsDTO> createPost(@RequestBody PostDataDTO payload, @RequestHeader("Authorization") String jwt) {
 
 
@@ -86,6 +88,19 @@ public class Postcontroller {
         Posts newPost = postService.createPosts(payload, creator);
 
         PostsDTO postsDTO = PostsDTOmapper.mapToPostsDTO(newPost, creator);
+        return new ResponseEntity<>(postsDTO, HttpStatus.CREATED);
+
+        
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<PostsDTO> editPost(@RequestBody PostDataDTO payload, @RequestHeader("Authorization") String jwt) {
+
+
+        UserModel creator = userService.findByJwtToken(jwt);
+        Posts post = postService.editPosts(payload);
+
+        PostsDTO postsDTO = PostsDTOmapper.mapToPostsDTO(post, creator);
         return new ResponseEntity<>(postsDTO, HttpStatus.CREATED);
 
         
@@ -118,11 +133,31 @@ public ResponseEntity<List<PostsDTO>> searchByContent(@PathVariable String keywo
     }
 
 
-    @GetMapping("find/{postId}")
-    public ResponseEntity<Posts> getbyId(@PathVariable String postId){
+
+    @DeleteMapping("delete/media/{uniqueKey}/{mediaId}")
+    public ResponseEntity<ApiResponse> deletePostsMedia(@PathVariable String uniqueKey,@PathVariable String mediaId, @RequestHeader("Authorization") String jwt) throws UserException {
       
-        Posts p = postService.findByID(postId);
-        return new ResponseEntity<>(p,HttpStatus.OK);
+       
+      
+        postService.deleteMedia(uniqueKey, mediaId);
+
+        ApiResponse response = new ApiResponse("Successfully Deleted !", true);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+
+    @GetMapping("get/{postId}")
+    public ResponseEntity<PostsDTO> getbyId(@PathVariable String postId, @RequestHeader("Authorization") String jwt){
+      
+        Posts post = postService.findByID(postId);
+        UserModel requser = userService.findByJwtToken(jwt);
+
+        PostsDTO postsDTO = PostsDTOmapper.mapToPostsDTO(post,requser);
+
+      return new ResponseEntity<>(postsDTO,HttpStatus.OK);
+       
     }
     
     //add comments
