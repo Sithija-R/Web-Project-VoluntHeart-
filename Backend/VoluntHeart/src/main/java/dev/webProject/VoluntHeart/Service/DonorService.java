@@ -20,18 +20,6 @@ public class DonorService {
         return donorRepo.findByEmail(email);
     }
 
-    //   public User findbyemail(String email){
-
-    //     DonorModel donor = null;
-    //     donorRepo.findFundraiserByEmail(email);
-    //     if (donor==null||donor.isGoogleLogin()) {
-    //         throw new UsernameNotFoundException("User Not found");
-            
-    //     }
-    //     List<GrantedAuthority> authorities = new ArrayList<>();
-    //     return new User(donor.getEmail(),donor.getPassword(),authorities);
-
-    // }
 
 //update profile
     public DonorModel updateUser(String email, DonorModel requester){

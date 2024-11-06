@@ -11,29 +11,24 @@ const Rightsection = () => {
   const { auth, post } = useSelector((store) => store);
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [hasDispatchedSuggestions, setHasDispatchedSuggestions] = useState(false);
-
-
-
+  const [hasDispatchedSuggestions, setHasDispatchedSuggestions] =
+    useState(false);
 
   const handleKeyword = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
   };
 
-useEffect(()=>{
-  if(searchTerm==""){
-    dispatch(getSuggestions("Senior"));
-    setHasDispatchedSuggestions(true);
-  }
-},[searchTerm, dispatch, hasDispatchedSuggestions])
+  useEffect(() => {
+    if (searchTerm === "") {
+      dispatch(getSuggestions("Senior"));
+      setHasDispatchedSuggestions(true);
+    }
+  }, [searchTerm, dispatch, hasDispatchedSuggestions]);
 
   useEffect(() => {
-    
-      dispatch(findUserByName(searchTerm));
-      dispatch(getSuggestions(searchTerm));
-
-   
+    dispatch(findUserByName(searchTerm));
+    dispatch(getSuggestions(searchTerm));
   }, [searchTerm]);
 
   useEffect(() => {
@@ -54,37 +49,33 @@ useEffect(()=>{
           <SearchIcon fontSize="large" sx={{ color: "#2b2b2b" }} />
         </div>
 
-        <div className="mt-5 min-h-16  rounded-xl">
-          {(auth.findUser?.length > 0)?(
-          <div>
-
-          <h2 className="px-2 text-[#0cac74] mb-3 font-semibold">Users</h2>
-          <div className="hideScrollBar max-h-[30vh] overflow-y-scroll px-3 space-y-2  py-2 ">
-          {auth.findUser?.map((item) =>
-                  item.userSecret == auth.user.userSecret ? (
+        <div className="mt-5 min-h-[7vh] overflow-y-hidden bg-white rounded-xl">
+          {auth.findUser?.length > 0 ? (
+            <div>
+              <h2 className="px-2 text-[#0cac74] mb-3 font-semibold">Users</h2>
+              <div className="hideScrollBar  max-h-[30vh] overflow-y-scroll overflow-x-hidden px-3 space-y-2  py-2 ">
+                {auth.findUser?.map((item) =>
+                  item.userSecret === auth.user.userSecret ? (
                     ""
                   ) : (
                     <ProfileCards item={item} />
                   )
                 )}
-                </div>
-          </div>
-
-          ):("")
-
-          }
-         <div>
-
-          
-         </div>
-
-              <h2 className="px-2 text-[#0cac74] mb-3 font-semibold ">Suggestions</h2>
-            <div className="hideScrollBar max-h-[40vh] overflow-y-scroll px-3 space-y-2 py-2 ">
-              {post.suggestion?.map((item) => (
-                <SuggestionCard item={item} />
-              ))}
+              </div>
             </div>
-       
+          ) : (
+            ""
+          )}
+          
+
+          <h2 className="px-2 text-[#0cac74] mb-3 font-semibold ">
+            Suggestions
+          </h2>
+          <div className="hideScrollBar max-h-[60vh] overflow-y-scroll px-3 space-y-2 py-2 ">
+            {post.suggestion?.map((item) => (
+              <SuggestionCard item={item} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

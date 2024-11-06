@@ -11,7 +11,11 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { useDispatch } from "react-redux";
-import { googleLoginhandler, donorRegister, fundRegister } from "../Storage/Auth/Action";
+import {
+  googleLoginhandler,
+  donorRegister,
+  fundRegister,
+} from "../Storage/Auth/Action";
 import { jwtDecode } from "jwt-decode";
 
 const SignForm = () => {
@@ -42,12 +46,10 @@ const SignForm = () => {
     console.log("handle submit", values);
   };
 
-  const handleFundSubmit=(values)=>{
-    console.log("fundraiser ", values)
+  const handleFundSubmit = (values) => {
+    console.log("fundraiser ", values);
     dispatch(fundRegister(values));
-  }
-
-
+  };
 
   const onGoogleSuccess = async (credentialResponse) => {
     const decodeCredentials = jwtDecode(credentialResponse.credential);
@@ -65,21 +67,17 @@ const SignForm = () => {
     console.error("Google login failed:", response);
   };
 
-
-
   const donorFormik = useFormik({
     initialValues: {
       fullName: "",
       email: "",
       password: "",
     },
-    
-    validationSchema :donorValidationSchema,
-    onSubmit:handleDonorSubmit,
-    
+
+    validationSchema: donorValidationSchema,
+    onSubmit: handleDonorSubmit,
   });
 
- 
   const fundraiserFormik = useFormik({
     initialValues: {
       fullName: "",
@@ -88,14 +86,11 @@ const SignForm = () => {
       regNumber: "",
     },
     validationSchema: fundValidationSchema,
-    onSubmit:handleFundSubmit,
-
+    onSubmit: handleFundSubmit,
   });
-  
-
 
   return (
-    <div className=" w-full px-1 flex-col space-y-2 text-center">
+    <div className=" w-full  flex-col space-y-2 text-center">
       <h1 className=" font-semibold text-xl ">Signup</h1>
 
       <Box sx={{ width: "100%" }}>
@@ -105,6 +100,7 @@ const SignForm = () => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+             
             }}
           >
             <TabList
@@ -118,12 +114,13 @@ const SignForm = () => {
             </TabList>
           </Box>
 
-          <TabPanel value="1">
+          <TabPanel value="1" className="">
             <form
               onSubmit={donorFormik.handleSubmit}
               className="w-full  flex-col space-y-2"
             >
               <TextField
+             
                 fullWidth
                 variant="filled"
                 color="success"
@@ -161,7 +158,6 @@ const SignForm = () => {
 
               <TextField
                 fullWidth
-               
                 variant="filled"
                 id="password"
                 color="success"
@@ -183,27 +179,21 @@ const SignForm = () => {
               <div className="flex w-full items-end justify-center ">
                 <Button
                   sx={{
-                    
-                      width: "50%",
-                      height:"6vh",
-                      borderRadius: "25px",
-              py: "10px",
-              backgroundColor: "#0cac74",
+                    width: "50%",
+                    height: "6vh",
+                    borderRadius: "25px",
+                    py: "10px",
+                    backgroundColor: "#0cac74",
                     "&:hover": { bgcolor: "darkgreen" },
                     lg: "2",
                     xs: "1",
                     fontSize: 18,
-                  
-                    
                   }}
                   variant="contained"
                   type="submit"
-                 
-            
                 >
                   Register
                 </Button>
-               
               </div>
             </form>
 
@@ -227,16 +217,12 @@ const SignForm = () => {
               <div className=" flex items-center justify-center ">
                 <GoogleLogin
                   text="signup_with"
-                 
-                  
                   width={350}
                   shape="pill"
                   theme="filled_blue"
                   size="large"
-               
                   onSuccess={onGoogleSuccess}
                   onError={onGoogleFailure}
-                  
                 />
               </div>
             </div>
@@ -330,7 +316,7 @@ const SignForm = () => {
                 <Button
                   sx={{
                     width: "50%",
-                    height:"6vh",
+                    height: "6vh",
                     fontSize: 18,
                     borderRadius: "25px",
                     py: "10px",
@@ -347,19 +333,18 @@ const SignForm = () => {
               </div>
             </form>
             <p className="mt-4">
-                Already have an account?
-                <span
-                  className="cursor-pointer text-blue-600"
-                  onClick={() => navigate("/authentication/login/")}
-                >
-                  {" "}
-                  Sign-in
-                </span>
-              </p>
+              Already have an account?
+              <span
+                className="cursor-pointer text-blue-600"
+                onClick={() => navigate("/authentication/login/")}
+              >
+               
+                Sign-in
+              </span>
+            </p>
           </TabPanel>
         </TabContext>
       </Box>
-     
     </div>
   );
 };

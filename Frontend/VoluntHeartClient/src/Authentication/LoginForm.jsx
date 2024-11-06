@@ -8,11 +8,9 @@ import { useDispatch } from "react-redux";
 import { googleLoginhandler, userLogin } from "../Storage/Auth/Action";
 import { jwtDecode } from "jwt-decode";
 
-
 const LoginForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is Required"),
@@ -22,9 +20,7 @@ const LoginForm = () => {
   const handleSubmit = (values) => {
     dispatch(userLogin(values));
     console.log("handle submit", values);
-   
   };
-
 
   const formik = useFormik({
     initialValues: {
@@ -35,43 +31,32 @@ const LoginForm = () => {
     validationSchema,
   });
 
- 
+  const onGoogleSuccess = async (credentialResponse) => {
+    const decodeCredentials = jwtDecode(credentialResponse.credential);
+    console.log(decodeCredentials);
 
-  const onGoogleSuccess = async(credentialResponse)=> {
-
-    const decodeCredentials= jwtDecode(credentialResponse.credential);
-    console.log(decodeCredentials)
-    
-    const googleId = decodeCredentials.sub
+    const googleId = decodeCredentials.sub;
     const fullName = decodeCredentials.name;
     const email = decodeCredentials.email;
     const profilePic = decodeCredentials.picture;
-  
 
-  
-  dispatch(googleLoginhandler(googleId,fullName,email,profilePic))
-
-    
+    dispatch(googleLoginhandler(googleId, fullName, email, profilePic));
   };
 
-
   const onGoogleFailure = (response) => {
-    console.error('Google login failed:', response);
+    console.error("Google login failed:", response);
   };
 
   return (
-    <div className=" w-full  px-12 flex-col space-y-8 text-center">
+    <div className=" w-full   flex-col space-y-8 text-center">
       <h1 className=" font-semibold text-xl sticky top-5">Login</h1>
 
       <form
         onSubmit={formik.handleSubmit}
         className="w-full  flex-col space-y-5"
       >
-
-        
         <TextField
-         
-         variant="filled"
+          variant="filled"
           fullWidth
           color="success"
           multilined
@@ -86,9 +71,7 @@ const LoginForm = () => {
         />
 
         <TextField
-        
-         variant="filled"
-        
+          variant="filled"
           fullWidth
           color="success"
           multilined={false}
@@ -106,10 +89,9 @@ const LoginForm = () => {
         <div className="flex w-full items-end justify-center ">
           <Button
             sx={{
-            
-                width: "50%",
-                height:"6vh",
-                fontSize: 18,
+              width: "50%",
+              height: "6vh",
+              fontSize: 18,
               borderRadius: "25px",
               py: "10px",
               backgroundColor: "#0cac74",
@@ -128,7 +110,7 @@ const LoginForm = () => {
         Don't have an account?{" "}
         <span
           className="cursor-pointer text-blue-600"
-          onClick={()=>navigate("/authentication/signup")}
+          onClick={() => navigate("/authentication/signup")}
         >
           Signup
         </span>
@@ -140,11 +122,8 @@ const LoginForm = () => {
         <div class="flex-grow h-px bg-slate-400 mx-2"></div>
       </div>
       <div className=" flex items-center justify-center">
-        <GoogleLogin 
+        <GoogleLogin
           text="continue_with"
-                 
-                   
-           
           width={350}
           shape="pill"
           theme="filled_blue"
@@ -152,10 +131,8 @@ const LoginForm = () => {
           onSuccess={onGoogleSuccess}
           onError={onGoogleFailure}
         />
-      
       </div>
       <p className="text-slate-500">Google login only available for donors</p>
-      
     </div>
   );
 };

@@ -1,18 +1,18 @@
 package dev.webProject.VoluntHeart.Service;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import co.elastic.clients.elasticsearch.cluster.reroute.Command;
 import dev.webProject.VoluntHeart.DTO.PostDataDTO;
 import dev.webProject.VoluntHeart.Exception.UserException;
 import dev.webProject.VoluntHeart.Models.Comment;
 import dev.webProject.VoluntHeart.Models.Media;
 import dev.webProject.VoluntHeart.Models.Posts;
 import dev.webProject.VoluntHeart.Models.Users.UserModel;
+import dev.webProject.VoluntHeart.Repository.MediaRepo;
 import dev.webProject.VoluntHeart.Repository.PostRepo;
 import dev.webProject.VoluntHeart.Repository.UserRepo;
 
@@ -24,6 +24,9 @@ public class PostService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private MediaRepo mediaRepo;
 
     // create post
     public Posts createPosts(PostDataDTO payload,UserModel creator) {
@@ -45,6 +48,7 @@ public class PostService {
                 media.setUrl(url);
                 media.setType("image");
                 post.getMedia().add(media);
+                mediaRepo.save(media);
                
             }   
         }
@@ -55,6 +59,7 @@ public class PostService {
                 media.setUrl(url);
                 media.setType("video");
                 post.getMedia().add(media);
+                mediaRepo.save(media);
                
             }   
         }
@@ -65,6 +70,47 @@ public class PostService {
         creator.getPostsIds().add(post);
         postRepo.insert(post);
         userRepo.save(creator);
+        return post;
+    }
+
+
+    public Posts editPosts(PostDataDTO payload) {
+        
+        String uniqueKey = payload.getUniqueKey();
+        String[] images = payload.getImages();
+        String[] videos = payload.getVideos();
+
+      
+        Posts post = findPostByUniqueKey(uniqueKey);
+      
+        post.setContent(payload.getContent());
+        post.setLocation(payload.getLocation());
+        
+        if (images!=null) {
+            for(String url:images){
+                Media media = new Media();
+                media.setName(url);
+                media.setUrl(url);
+                media.setType("image");
+                post.getMedia().add(media);
+                mediaRepo.save(media);
+               
+            }   
+        }
+        if (videos!=null) {
+            for(String url:videos){
+                Media media = new Media();
+                media.setName(url);
+                media.setUrl(url);
+                media.setType("video");
+                post.getMedia().add(media);
+                mediaRepo.save(media);
+               
+            }   
+        }
+      
+        postRepo.save(post);
+        
         return post;
     }
 
@@ -80,6 +126,7 @@ public class PostService {
 
         postRepo.delete(post);
         creator.getPostsIds().remove(post);
+        userRepo.save(creator);
     }
 
 
@@ -123,5 +170,22 @@ public class PostService {
         return newComment;
     }
 
+    public Posts deleteMedia(String uniqueKey, String mediaId) {
+       
+        Posts post = findPostByUniqueKey(uniqueKey);
+        Optional<Media> media = mediaRepo.findById(mediaId);
+
+     
+
+        if (media!=null) {
+            mediaRepo.deleteById(mediaId);
+            post.getMedia().remove(media);
+            postRepo.save(post);
+            return post;
+            
+        }
+        return post;
+    }
+    
 
 }

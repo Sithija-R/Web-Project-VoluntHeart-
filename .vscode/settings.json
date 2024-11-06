@@ -1,5 +1,19 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable"
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable",
+    "workbench.colorCustomizations": {
+        "activityBar.foreground": "#02f8bf",
+        "tab.hoverBorder": "#00bfff",
+        "tab.activeForeground": "#29dd9e",
+        "sideBar.border": "#037a55",
+        "sideBar.foreground": "#29dd9e",
+        "editor.background": "#212733",
+        "sideBar.background": "#1a1f28",
+        "activityBar.background": "#212735",
+        "terminal.selectionForeground": "#ebd988",
+        "terminal.tab.activeBorder": "#00ddff",
+        "terminalOverviewRuler.cursorForeground": "#9d00ff"
+    },
+    "git.ignoreLimitWarning": true
 }

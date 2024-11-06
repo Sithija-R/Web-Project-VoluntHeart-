@@ -1,12 +1,9 @@
 package dev.webProject.VoluntHeart.Configuration;
 
-
 import java.util.Arrays;
 import java.util.Collections;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,27 +34,45 @@ public class AppConfig {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Default to stateles
                     session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                   .sessionFixation().none();})
-                .authorizeHttpRequests(Authorize -> Authorize.anyRequest().permitAll())
+                  .authorizeHttpRequests(Authorize -> Authorize.requestMatchers("/api/**", "/auth/**").permitAll()
+                  .anyRequest().authenticated())
+                .formLogin(Customizer.withDefaults())
                 .addFilterBefore(new JwtTokenValidator(),BasicAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors((cors) -> cors.configurationSource(corsConfigurationSource()))
                 .httpBasic(Customizer.withDefaults())
-                
-              
-               
-               
-                
-			    ;
-             
-      
-      
+                 ;
         return http.build();
     }
+
+
+    // @Bean
+    // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+    //     http.sessionManagement(session -> {
+    //         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Default to stateles
+    //         session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+    //                 .sessionFixation().none();
+    //     })
+    //             .authorizeHttpRequests(Authorize -> Authorize.requestMatchers("/api/**", "/auth/**").permitAll()
+    //                     .anyRequest().authenticated())
+    //             .formLogin(Customizer.withDefaults())
+    //             .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+    //             .csrf(AbstractHttpConfigurer::disable)
+    //             .cors((cors) -> cors.configurationSource(corsConfigurationSource()))
+    //             .httpBasic(Customizer.withDefaults())
+
+    //     ;
+
+    //     return http.build();
+    // }
+
 
     private CorsConfigurationSource corsConfigurationSource() {
         return request -> {
             CorsConfiguration cfg = new CorsConfiguration();
             cfg.setAllowedOrigins(Arrays.asList("http://localhost:3000/"));
+            cfg.addAllowedOriginPattern("*");
             cfg.setAllowedMethods(Collections.singletonList("*"));
             cfg.setAllowedHeaders(Arrays.asList("*")); 
             cfg.setAllowCredentials(true);

@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class PostDataDTO {
 
+    private String uniqueKey;
     private String content;
     private String[] images ;
     private String[] videos;

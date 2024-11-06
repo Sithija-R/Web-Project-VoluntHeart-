@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.crypto.SecretKey;
-
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,7 +29,7 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
 
     String jwt = request.getHeader(JwtConstant.JWT_HEADER);
     if (jwt != null && jwt.startsWith("Bearer ")) {
-        jwt = jwt.substring(7); // Cut "Bearer " prefix
+        jwt = jwt.substring(7); 
         try {
             SecretKey key = Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
             Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
@@ -42,7 +41,7 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
             Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, grantedAuthorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
-            // It might be a good idea to log this exception
+           
             throw new BadCredentialsException("Invalid token", e);
         }
     }

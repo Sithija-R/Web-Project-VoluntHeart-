@@ -15,11 +15,14 @@ import MapComponent from "../MapComponents/MapComponent";
 import MediaCarousel from "./Utilities/MediaCarousel";
 import { uploadMedia } from "./Utilities/UploadHandle";
 import { useDispatch } from "react-redux";
-import { createPost } from "../../Storage/Posts/Action";
+import { createPost, editPost } from "../../Storage/Posts/Action";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
+import MediaDisplayer from "./Utilities/MediaDisplayer";
 
-const Postform = ({ handleModalClose }) => {
+const EditPost = ({ handleModalClose, post }) => {
   const dispatch = useDispatch();
+
+
 
   const [selectedImage, setselectedImage] = useState([]);
 
@@ -51,9 +54,9 @@ const Postform = ({ handleModalClose }) => {
   });
 
   const handleSubmit = (values, { resetForm }) => {
-    dispatch(createPost(values));
+    dispatch(editPost(values));
     handleModalClose();
-    console.log(values);
+    console.log("edit ",values);
     resetForm();
     setselectedImage([]);
     selectedVideo([]);
@@ -61,10 +64,11 @@ const Postform = ({ handleModalClose }) => {
 
   const formik = useFormik({
     initialValues: {
-      content: "",
+      uniqueKey:post?.uniqueKey,
+      content: post?.content,
       images: [],
       videos: [],
-      location: "",
+      location:post?.location,
     },
     onSubmit: handleSubmit,
     validationSchema,
@@ -127,7 +131,7 @@ const Postform = ({ handleModalClose }) => {
   }, [selectedVideo]);
 
   return (
-    <form onSubmit={formik.handleSubmit} className="w-full">
+    <form onSubmit={formik.handleSubmit} className="w-full  ">
       <div className="py-3 mb-5">
         <TextField
           fullWidth
@@ -164,7 +168,7 @@ const Postform = ({ handleModalClose }) => {
         </div>
       </div>
 
-      <div className="flex justify-between items-center  pt-5">
+      <div className=" items-center  pt-5">
         <div className="flex space-x-5 items-center">
           <label className="flex items-center space-x-2 rounded-md cursor-pointer">
             <AddPhotoAlternateIcon sx={{ color: "#1d9bf0" }} />
@@ -233,10 +237,18 @@ const Postform = ({ handleModalClose }) => {
             </Box>
           </Modal>
         </div>
-        <div>
+        <div className=" w-full mt-1 py-2 flex ">
+            {post.mediaList?.map((item) => 
+            
+            <MediaDisplayer postuniqueKey={post?.uniqueKey} mediaItem={item} />
+            )}
+           
+        </div>
+      </div>
+        <div className="mt-5 flex justify-end">
           <Button
             sx={{
-              width: "100%",
+              width: "20%",
               borderRadius: "20px",
               py: "7px",
               backgroundColor: "green",
@@ -247,12 +259,11 @@ const Postform = ({ handleModalClose }) => {
             variant="contained"
             type="submit"
           >
-            Post
+            Save
           </Button>
         </div>
-      </div>
     </form>
   );
 };
 
-export default Postform;
+export default EditPost;

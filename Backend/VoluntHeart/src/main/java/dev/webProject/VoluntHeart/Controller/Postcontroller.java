@@ -1,7 +1,7 @@
+
 package dev.webProject.VoluntHeart.Controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import dev.webProject.VoluntHeart.DTO.PostDataDTO;
 import dev.webProject.VoluntHeart.DTO.PostsDTO;
 import dev.webProject.VoluntHeart.DTOmapper.PostsDTOmapper;
@@ -21,7 +20,6 @@ import dev.webProject.VoluntHeart.Models.Users.UserModel;
 import dev.webProject.VoluntHeart.Response.ApiResponse;
 import dev.webProject.VoluntHeart.Service.PostService;
 import dev.webProject.VoluntHeart.Service.UserService;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -42,6 +40,7 @@ public class Postcontroller {
     public ResponseEntity<List<PostsDTO>> getAllPosts( @RequestHeader("Authorization") String jwt) {
         
         UserModel user = userService.findByJwtToken(jwt);
+        
 
         List<Posts> allPosts = postService.allPosts();
         List<PostsDTO> allPostsDTO = PostsDTOmapper.toListOfPostDTOs(allPosts, user);
@@ -81,7 +80,7 @@ public class Postcontroller {
 
 
     //create post
-    @PostMapping("/create")
+    @PostMapping("/create") 
     public ResponseEntity<PostsDTO> createPost(@RequestBody PostDataDTO payload, @RequestHeader("Authorization") String jwt) {
 
 
@@ -94,15 +93,20 @@ public class Postcontroller {
         
     }
 
-    // public ResponseEntity<PostsDTO> createPost(@RequestBody Posts
-    // req,@RequestHeader("Authorization") String jwt){
-    // UserModel creator = userService.findByJwtToken(jwt);
-    // Posts newPost= postService.createPosts(null, creator);
+    @PostMapping("/edit")
+    public ResponseEntity<PostsDTO> editPost(@RequestBody PostDataDTO payload, @RequestHeader("Authorization") String jwt) {
 
-    // PostsDTO postsDTO = PostsDTOmapper.mapToPostsDTO(newPost, creator);
-    // return new ResponseEntity<>(postsDTO,HttpStatus.CREATED);
 
-    // }
+        UserModel creator = userService.findByJwtToken(jwt);
+        Posts post = postService.editPosts(payload);
+
+        PostsDTO postsDTO = PostsDTOmapper.mapToPostsDTO(post, creator);
+        return new ResponseEntity<>(postsDTO, HttpStatus.CREATED);
+
+        
+    }
+
+  
 @GetMapping("/search/{keyword}")
 public ResponseEntity<List<PostsDTO>> searchByContent(@PathVariable String keyword, @RequestHeader("Authorization") String jwt){
    
@@ -129,11 +133,31 @@ public ResponseEntity<List<PostsDTO>> searchByContent(@PathVariable String keywo
     }
 
 
-    @GetMapping("find/{postId}")
-    public ResponseEntity<Posts> getbyId(@PathVariable String postId){
+
+    @DeleteMapping("delete/media/{uniqueKey}/{mediaId}")
+    public ResponseEntity<ApiResponse> deletePostsMedia(@PathVariable String uniqueKey,@PathVariable String mediaId, @RequestHeader("Authorization") String jwt) throws UserException {
       
-        Posts p = postService.findByID(postId);
-        return new ResponseEntity<>(p,HttpStatus.OK);
+       
+      
+        postService.deleteMedia(uniqueKey, mediaId);
+
+        ApiResponse response = new ApiResponse("Successfully Deleted !", true);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+
+    @GetMapping("get/{postId}")
+    public ResponseEntity<PostsDTO> getbyId(@PathVariable String postId, @RequestHeader("Authorization") String jwt){
+      
+        Posts post = postService.findByID(postId);
+        UserModel requser = userService.findByJwtToken(jwt);
+
+        PostsDTO postsDTO = PostsDTOmapper.mapToPostsDTO(post,requser);
+
+      return new ResponseEntity<>(postsDTO,HttpStatus.OK);
+       
     }
     
     //add comments

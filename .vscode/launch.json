@@ -2,6 +2,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "dev.webProject.VoluntHeart.Models.Main",
+            "projectName": "VoluntHeart"
+        },
+        {
+            "type": "java",
+            "name": "main",
+            "request": "launch",
+            "mainClass": "dev.webProject.VoluntHeart.Models.main",
+            "projectName": "VoluntHeart"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-VoluntHeartApplication<VoluntHeart>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
