@@ -68,7 +68,7 @@ const Profile = () => {
           : `http://${url}`;
       window.open(formattedUrl, "_blank");
     } else {
-      console.error("Website URL is not defined");
+      console.error("Website URL Is Not Defined");
     }
   };
 

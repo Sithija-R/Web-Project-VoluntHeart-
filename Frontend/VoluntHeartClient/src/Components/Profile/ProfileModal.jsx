@@ -232,7 +232,7 @@ const ProfileModal = ({ open, handleClose }) => {
                         <>
                           <AddPhotoAlternateIcon fontSize="large" />
                           <p className="text-sm">
-                            Drag and drop or click here to upload profile image
+                            Drag and Drop or Click Here To Upload Profile Image
                           </p>
                         </>
                       )}
