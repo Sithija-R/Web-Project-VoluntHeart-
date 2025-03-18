@@ -26,12 +26,14 @@ import org.springframework.web.cors.CorsConfigurationSource;
 public class AppConfig {
 
     
+
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     
         
         http    .sessionManagement(session -> {
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Default to stateles
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS); 
                     session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                   .sessionFixation().none();})
                   .authorizeHttpRequests(Authorize -> Authorize.requestMatchers("/api/**", "/auth/**").permitAll()
@@ -46,27 +48,7 @@ public class AppConfig {
     }
 
 
-    // @Bean
-    // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-    //     http.sessionManagement(session -> {
-    //         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Default to stateles
-    //         session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-    //                 .sessionFixation().none();
-    //     })
-    //             .authorizeHttpRequests(Authorize -> Authorize.requestMatchers("/api/**", "/auth/**").permitAll()
-    //                     .anyRequest().authenticated())
-    //             .formLogin(Customizer.withDefaults())
-    //             .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
-    //             .csrf(AbstractHttpConfigurer::disable)
-    //             .cors((cors) -> cors.configurationSource(corsConfigurationSource()))
-    //             .httpBasic(Customizer.withDefaults())
-
-    //     ;
-
-    //     return http.build();
-    // }
-
+    
 
     private CorsConfigurationSource corsConfigurationSource() {
         return request -> {
@@ -93,6 +75,26 @@ public class AppConfig {
         return new BCryptPasswordEncoder();
     }
 
- 
+ // @Bean
+    // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+    //     http.sessionManagement(session -> {
+    //         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS); // Default to stateles
+    //         session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+    //                 .sessionFixation().none();
+    //     })
+    //             .authorizeHttpRequests(Authorize -> Authorize.requestMatchers("/api/**", "/auth/**").permitAll()
+    //                     .anyRequest().authenticated())
+    //             .formLogin(Customizer.withDefaults())
+    //             .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+    //             .csrf(AbstractHttpConfigurer::disable)
+    //             .cors((cors) -> cors.configurationSource(corsConfigurationSource()))
+    //             .httpBasic(Customizer.withDefaults())
+
+    //     ;
+
+    //     return http.build();
+    // }
+
    
 }

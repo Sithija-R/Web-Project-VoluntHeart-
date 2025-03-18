@@ -11,7 +11,7 @@ const LandingPage = () => {
       <div className=" flex items-center justify-between text-white text-xl space-x-14 px-10">
 
           <p className="cursor-pointer hover:text-green-500" onClick={()=>navigate("welcome/help")}>Help</p>
-          <p className="cursor-pointer hover:text-green-500" onClick={()=>navigate("authentication/login")}>SignIn</p>
+          <p className="cursor-pointer hover:text-green-500" onClick={()=>navigate("authentication/login")}>Sign-In</p>
           <p className="cursor-pointer hover:text-green-500" onClick={()=>navigate("authentication/signup")}>Sign-Up</p>
       </div>
        

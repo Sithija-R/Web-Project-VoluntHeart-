@@ -28,6 +28,7 @@ def recommend_opportunities(user_input, data, vectorizer, vector_matrix, top_n=1
     return recommendations
 
 
+
 @app.route('/suggestios/<keyword>', methods=['GET'])
 def recommend(keyword):
     recommendations = recommend_opportunities(keyword, volunteering_data, cv, vector_matrix)
